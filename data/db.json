@@ -1,0 +1,165 @@
+{
+  "admins": [
+    {
+      "id": "admin001",
+      "username": "superadmin",
+      "password": "admin1234",
+      "role": "superadmin",
+      "name": "Super Administrator",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "admin002",
+      "username": "treasurer",
+      "password": "treasurer1234",
+      "role": "treasurer",
+      "name": "SACCO Treasurer",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "settings": {
+    "minDailySavings": 2000,
+    "defaultInterestRate": 10,
+    "loanEligibilityMonths": 1,
+    "latePenaltyPercent": 5,
+    "maxLoanMultiplier": 3
+  },
+  "saccos": [
+    {
+      "id": "mny5zqvsygqyi",
+      "name": "kampala riders sacco",
+      "location": "kampala",
+      "chairperson": "masese ivan",
+      "phone": "0706150080",
+      "createdAt": "2026-04-14T05:11:59.704Z",
+      "status": "active"
+    }
+  ],
+  "riders": [
+    {
+      "id": "mo0hu5x8rttxf",
+      "name": "ivanmasese",
+      "phone": "0706150080",
+      "stage": "wandegeya stage",
+      "saccoId": "mny5zqvsygqyi",
+      "pin": "1234",
+      "status": "approved",
+      "loanLimit": 0,
+      "createdAt": "2026-04-15T20:19:07.005Z"
+    }
+  ],
+  "savings": [
+    {
+      "id": "mo115z3d85pm6",
+      "riderId": "mo0hu5x8rttxf",
+      "amount": 20000,
+      "method": "cash_request",
+      "reference": "PENDING-1776316810729",
+      "date": "2026-04-16T05:20:10.769Z",
+      "reversed": false,
+      "recordedBy": "ivanmasese"
+    },
+    {
+      "id": "mo116l7xw9bip",
+      "riderId": "mo0hu5x8rttxf",
+      "amount": 10000,
+      "method": "airtel",
+      "reference": "MM-1776316839405",
+      "date": "2026-04-16T05:20:39.405Z",
+      "reversed": false,
+      "recordedBy": "ivanmasese"
+    }
+  ],
+  "loans": [],
+  "repayments": [],
+  "messages": [
+    {
+      "id": "mo11eul6ur5vm",
+      "target": "all",
+      "saccoId": null,
+      "message": "congratulations on saving with us",
+      "sentTo": 1,
+      "sentBy": "SACCO Treasurer",
+      "sentAt": "2026-04-16T05:27:04.794Z"
+    }
+  ],
+  "auditLog": [
+    {
+      "id": "mny5y1ig590y7",
+      "admin": "Super Administrator",
+      "action": "LOGIN",
+      "details": "Super Administrator logged in",
+      "timestamp": "2026-04-14T05:10:40.168Z"
+    },
+    {
+      "id": "mny5zqvssbq06",
+      "admin": "Super Administrator",
+      "action": "CREATE_SACCO",
+      "details": "Created SACCO: kampala riders sacco",
+      "timestamp": "2026-04-14T05:11:59.704Z"
+    },
+    {
+      "id": "mny64e9ko907t",
+      "admin": "SACCO Treasurer",
+      "action": "LOGIN",
+      "details": "SACCO Treasurer logged in",
+      "timestamp": "2026-04-14T05:15:36.632Z"
+    },
+    {
+      "id": "mo0hu5xap58ak",
+      "admin": "ivanmasese",
+      "action": "SELF_REGISTER",
+      "details": "Rider ivanmasese (0706150080) self-registered. Awaiting approval.",
+      "timestamp": "2026-04-15T20:19:07.006Z"
+    },
+    {
+      "id": "mo0hwbzoysdvb",
+      "admin": "Super Administrator",
+      "action": "LOGIN",
+      "details": "Super Administrator logged in",
+      "timestamp": "2026-04-15T20:20:48.180Z"
+    },
+    {
+      "id": "mo11332sc79t6",
+      "admin": "Super Administrator",
+      "action": "LOGIN",
+      "details": "Super Administrator logged in",
+      "timestamp": "2026-04-16T05:17:55.924Z"
+    },
+    {
+      "id": "mo113jl84pofq",
+      "admin": "Super Administrator",
+      "action": "RIDER_STATUS",
+      "details": "Set rider ivanmasese to approved",
+      "timestamp": "2026-04-16T05:18:17.324Z"
+    },
+    {
+      "id": "mo115z4h0l2fl",
+      "admin": "ivanmasese",
+      "action": "RIDER_CASH_DEPOSIT",
+      "details": "Rider ivanmasese deposited cash UGX 20000",
+      "timestamp": "2026-04-16T05:20:10.769Z"
+    },
+    {
+      "id": "mo116l7yeuqc5",
+      "admin": "ivanmasese",
+      "action": "RIDER_MM_DEPOSIT",
+      "details": "AIRTEL deposit UGX 10000 by ivanmasese. Ref: MM-1776316839405",
+      "timestamp": "2026-04-16T05:20:39.406Z"
+    },
+    {
+      "id": "mo11c5ssyziq2",
+      "admin": "SACCO Treasurer",
+      "action": "LOGIN",
+      "details": "SACCO Treasurer logged in",
+      "timestamp": "2026-04-16T05:24:59.356Z"
+    },
+    {
+      "id": "mo11eul6ra722",
+      "admin": "SACCO Treasurer",
+      "action": "SEND_MESSAGE",
+      "details": "Sent message to 1 riders (all)",
+      "timestamp": "2026-04-16T05:27:04.794Z"
+    }
+  ]
+}
