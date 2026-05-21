@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BodaSACCO — Master Control</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/master.css"/>  <style>
+    * { font-size: 16px; }
+    body { font-size: 16px !important; font-family: 'Outfit', sans-serif !important; line-height: 1.8 !important; }
+    h1 { font-size: 32px !important; }
+    h2 { font-size: 26px !important; }
+    h3 { font-size: 20px !important; }
+    h4 { font-size: 18px !important; }
+    p, span, div, td, th, li, a, label { font-size: 16px !important; }
+    button { font-size: 15px !important; }
+    input, select, textarea { font-size: 16px !important; }
+    .sbn { font-size: 15px !important; }
+    .sb-nav-label { font-size: 12px !important; }
+    .sc-val { font-size: 24px !important; }
+    .sc-label { font-size: 13px !important; }
+    .badge { font-size: 13px !important; }
+    .dtable th { font-size: 13px !important; }
+    .dtable td { font-size: 15px !important; }
+    .greeting-title { font-size: 28px !important; }
+    .tb-title { font-size: 22px !important; }
+    .wallet-balance-amount { font-size: 40px !important; }
+    .mstat-val { font-size: 24px !important; }
+    .mstat-label { font-size: 13px !important; }
+    .ms-btn { font-size: 15px !important; }
+    .mtable td { font-size: 15px !important; }
+    .mtable th { font-size: 13px !important; }
+    .rbtn-primary { font-size: 16px !important; }
+    .rfield label { font-size: 15px !important; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="login-page" class="page active">
+  <div class="login-wrap">
+    <div class="login-icon">🛡️</div>
+    <h1>Master Control Panel</h1>
+    <p>BodaSACCO Platform Owner Access</p>
+    <div class="lfield"><label>Username</label><input type="text" id="m-user" placeholder="master"/></div>
+    <div class="lfield"><label>Password</label><input type="password" id="m-pass" placeholder="••••••••"/></div>
+    <button class="mbtn" onclick="masterLogin()">Access Platform →</button>
+    <div id="login-msg" class="mmsg"></div>
+    <a href="/" class="back-link">← SACCO Admin Panel</a>
+  </div>
+</div>
+
+<!-- MASTER PANEL -->
+<div id="master-page" class="page">
+
+  <!-- SIDEBAR -->
+  <aside class="msidebar">
+    <div class="ms-logo">
+      <span>🛡️</span>
+      <div>
+        <div class="ms-title">Master Admin</div>
+        <div class="ms-sub">Platform Owner</div>
+      </div>
+    </div>
+    <nav class="ms-nav">
+      <button class="ms-btn active" onclick="goTo('overview')"><span>📊</span>Overview</button>
+      <button class="ms-btn" onclick="goTo('saccos')"><span>🏢</span>SACCOs</button>
+      <button class="ms-btn" onclick="goTo('payments')"><span>💳</span>Payments</button>
+      <button class="ms-btn" onclick="goTo('settings')"><span>⚙️</span>Settings</button>
+      <button class="ms-btn" onclick="goTo('audit')"><span>📋</span>Audit Log</button>
+      <button class="ms-btn" onclick="goTo('backups')"><span>💾</span>Backups</button>
+    </nav>
+    <div class="ms-footer">
+      <div class="ms-owner" id="ms-owner-name">Platform Owner</div>
+      <button class="ms-logout" onclick="masterLogout()">↩ Logout</button>
+      <a href="/" class="ms-link">SACCO Admin ↗</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="mmain">
+    <div class="mtopbar">
+      <div class="mtopbar-title" id="mtopbar-title">Overview</div>
+      <div class="mtopbar-right">
+        <div class="live-dot"></div>
+        <span class="live-txt">Live</span>
+        <button class="mrefresh" onclick="loadPage()">↻ Refresh</button>
+      </div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div id="pg-overview" class="mpg active">
+      <div class="mstat-grid" id="overview-stats"></div>
+      <div class="mtwo-col">
+        <div class="mpanel">
+          <div class="mpanel-head"><h3>🏢 SACCO Performance</h3></div>
+          <div id="sacco-perf-list"></div>
+        </div>
+        <div class="mpanel">
+          <div class="mpanel-head"><h3>💳 Recent Payments</h3></div>
+          <div id="recent-payments-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SACCOs -->
+    <div id="pg-saccos" class="mpg">
+      <div class="mpage-actions">
+        <button class="mbtn-add" onclick="openModal('modal-create-sacco')">➕ Add New SACCO</button>
+        <select id="sacco-status-filter" class="mselect" onchange="loadSaccos()">
+          <option value="">All Status</option>
+          <option value="trial">Trial</option>
+          <option value="active">Active</option>
+          <option value="suspended">Suspended</option>
+        </select>
+      </div>
+      <div class="mpanel">
+        <div class="mpanel-head"><h3>All SACCOs on Platform</h3></div>
+        <div id="saccos-list"></div>
+      </div>
+    </div>
+
+    <!-- PAYMENTS -->
+    <div id="pg-payments" class="mpg">
+      <div class="mpanel">
+        <div class="mpanel-head"><h3>💳 All Subscription Payments</h3></div>
+        <div id="payments-list"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="pg-settings" class="mpg">
+      <div class="mpanel">
+        <div class="mpanel-head"><h3>⚙️ Platform Settings</h3></div>
+        <div class="mpanel-body">
+          <div class="mform-row">
+            <div class="mfield"><label>Platform Name</label><input type="text" id="set-name"/></div>
+            <div class="mfield"><label>Trial Days</label><input type="number" id="set-trial"/></div>
+            <div class="mfield"><label>Setup Fee (UGX)</label><input type="number" id="set-setup"/></div>
+          </div>
+          <h4 style="margin:20px 0 12px;color:var(--muted);font-size:0.82rem;text-transform:uppercase;letter-spacing:0.5px">Subscription Plans</h4>
+          <div class="mform-row">
+            <div class="mfield"><label>Starter Price (UGX)</label><input type="number" id="set-starter-price"/></div>
+            <div class="mfield"><label>Growth Price (UGX)</label><input type="number" id="set-growth-price"/></div>
+            <div class="mfield"><label>Pro Price (UGX)</label><input type="number" id="set-pro-price"/></div>
+          </div>
+          <button class="mbtn-add" onclick="saveSettings()">💾 Save Settings</button>
+          <div id="settings-msg" class="mmsg" style="margin-top:12px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUDIT -->
+    <div id="pg-audit" class="mpg">
+      <div class="mpanel">
+        <div class="mpanel-head"><h3>📋 Full Platform Audit Log</h3></div>
+        <div id="audit-list"></div>
+      </div>
+    </div>
+
+    <!-- BACKUPS -->
+    <div id="pg-backups" class="mpg">
+      <div class="mpanel">
+        <div class="mpanel-head"><h3>💾 Database Backups</h3></div>
+        <div class="mpanel-body">
+          <p style="color:var(--muted);font-size:0.88rem;margin-bottom:16px">Backups are created automatically every 24 hours. Last 30 days are kept.</p>
+          <div id="backups-list"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL: CREATE SACCO -->
+<div id="modal-create-sacco" class="moverlay">
+  <div class="mmodal">
+    <div class="mmodal-head">
+      <h3>🏢 Add New SACCO Client</h3>
+      <button onclick="closeModal('modal-create-sacco')">✕</button>
+    </div>
+    <div class="mmodal-body">
+      <div class="mform-row">
+        <div class="mfield"><label>SACCO Name</label><input type="text" id="new-sacco-name" placeholder="e.g. Kampala Riders SACCO"/></div>
+        <div class="mfield"><label>Location</label><input type="text" id="new-sacco-location" placeholder="e.g. Kampala"/></div>
+      </div>
+      <div class="mform-row">
+        <div class="mfield"><label>Chairman Name</label><input type="text" id="new-chair-name" placeholder="Full name"/></div>
+        <div class="mfield"><label>Chairman Phone</label><input type="tel" id="new-chair-phone" placeholder="e.g. 0701234567"/></div>
+      </div>
+      <div class="mform-row">
+        <div class="mfield"><label>Chairman Email (optional)</label><input type="email" id="new-chair-email" placeholder="email@example.com"/></div>
+        <div class="mfield">
+          <label>Subscription Plan</label>
+          <select id="new-sacco-plan" class="mselect" style="width:100%">
+            <option value="starter">Starter — UGX 100,000/month (up to 100 riders)</option>
+            <option value="growth">Growth — UGX 200,000/month (up to 500 riders)</option>
+            <option value="pro">Pro — UGX 400,000/month (up to 2000 riders)</option>
+          </select>
+        </div>
+      </div>
+      <div class="mfield">
+        <label><input type="checkbox" id="new-setup-paid" style="width:auto;margin-right:8px"/>Setup fee of UGX 300,000 has been paid</label>
+      </div>
+      <button class="mbtn-add" onclick="createSacco()">Create SACCO & Generate Login →</button>
+      <div id="create-sacco-msg" class="mmsg" style="margin-top:12px"></div>
+      <!-- Show generated credentials -->
+      <div id="sacco-credentials" style="display:none" class="credentials-box"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: RECORD PAYMENT -->
+<div id="modal-record-payment" class="moverlay">
+  <div class="mmodal">
+    <div class="mmodal-head">
+      <h3>💳 Record Subscription Payment</h3>
+      <button onclick="closeModal('modal-record-payment')">✕</button>
+    </div>
+    <div class="mmodal-body">
+      <div id="payment-sacco-info" class="info-box"></div>
+      <div class="mfield"><label>Amount Paid (UGX)</label><input type="number" id="pay-amount" placeholder="e.g. 200000"/></div>
+      <div class="mfield"><label>Payment Method</label>
+        <select id="pay-method" class="mselect" style="width:100%">
+          <option value="cash">Cash</option>
+          <option value="mtn">MTN MoMo</option>
+          <option value="airtel">Airtel Money</option>
+          <option value="bank">Bank Transfer</option>
+        </select>
+      </div>
+      <div class="mfield"><label>Reference / Receipt No.</label><input type="text" id="pay-ref" placeholder="Optional"/></div>
+      <button class="mbtn-add" onclick="recordPayment()">Record Payment →</button>
+      <div id="payment-msg" class="mmsg" style="margin-top:12px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: SACCO DETAILS -->
+<div id="modal-sacco-detail" class="moverlay">
+  <div class="mmodal mmodal-wide">
+    <div class="mmodal-head">
+      <h3>🏢 SACCO Details</h3>
+      <button onclick="closeModal('modal-sacco-detail')">✕</button>
+    </div>
+    <div class="mmodal-body" id="sacco-detail-body"></div>
+  </div>
+</div>
+
+<script src="js/master.js"></script>
+</body>
+</html>

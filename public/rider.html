@@ -5,359 +5,434 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BodaSACCO — Rider Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Lora:ital@0;1&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/rider.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/rider.css"/>  <style>
+    * { font-size: 16px; }
+    body { font-size: 16px !important; font-family: 'Outfit', sans-serif !important; line-height: 1.8 !important; }
+    h1 { font-size: 32px !important; }
+    h2 { font-size: 26px !important; }
+    h3 { font-size: 20px !important; }
+    h4 { font-size: 18px !important; }
+    p, span, div, td, th, li, a, label { font-size: 16px !important; }
+    button { font-size: 15px !important; }
+    input, select, textarea { font-size: 16px !important; }
+    .sbn { font-size: 15px !important; }
+    .sb-nav-label { font-size: 12px !important; }
+    .sc-val { font-size: 24px !important; }
+    .sc-label { font-size: 13px !important; }
+    .badge { font-size: 13px !important; }
+    .dtable th { font-size: 13px !important; }
+    .dtable td { font-size: 15px !important; }
+    .greeting-title { font-size: 28px !important; }
+    .tb-title { font-size: 22px !important; }
+    .wallet-balance-amount { font-size: 40px !important; }
+    .mstat-val { font-size: 24px !important; }
+    .mstat-label { font-size: 13px !important; }
+    .ms-btn { font-size: 15px !important; }
+    .mtable td { font-size: 15px !important; }
+    .mtable th { font-size: 13px !important; }
+    .rbtn-primary { font-size: 16px !important; }
+    .rfield label { font-size: 15px !important; }
+  </style>
 </head>
 <body>
 
 <!-- ========== AUTH PAGE ========== -->
 <div id="auth-page" class="rpage active">
   <div class="auth-left">
-    <div class="auth-brand">🏍️ BodaSACCO</div>
-    <h1>Your Money.<br/><em>Your Future.</em></h1>
-    <p>Save daily, access loans, and build a better tomorrow with your SACCO.</p>
-    <div class="auth-pills">
-      <div class="pill">💰 Save Anytime</div>
-      <div class="pill">🏦 Get Loans</div>
-      <div class="pill">📱 Mobile Money</div>
-      <div class="pill">📊 Track Progress</div>
+    <div class="auth-brand">
+      <span class="brand-moto">🏍️</span>
+      <span>BodaSACCO</span>
+    </div>
+    <div class="auth-hero">
+      <h1>Your Financial<br/><em>Home.</em></h1>
+      <p>Save consistently. Access loans. Build your future — one day at a time.</p>
+    </div>
+    <div class="auth-stats">
+      <div class="astat"><div class="astat-num">3×</div><div class="astat-lbl">Loan Multiplier</div></div>
+      <div class="astat"><div class="astat-num">100%</div><div class="astat-lbl">Secure & Local</div></div>
+      <div class="astat"><div class="astat-num">24/7</div><div class="astat-lbl">Access Anytime</div></div>
     </div>
     <a href="/index.html" class="admin-link">Admin Panel ↗</a>
   </div>
-
   <div class="auth-right">
     <div class="auth-card">
-      <!-- Tabs -->
       <div class="auth-tabs">
         <button class="atab active" id="tab-login-btn" onclick="showAuthTab('login')">Sign In</button>
         <button class="atab" id="tab-reg-btn" onclick="showAuthTab('register')">Register</button>
       </div>
-
       <!-- LOGIN -->
       <div id="form-login" class="aform active">
-        <div class="form-top">
-          <h2>Welcome back</h2>
-          <p>Sign in with your phone and PIN</p>
-        </div>
-        <div class="rfield">
-          <label>Phone Number</label>
-          <input type="tel" id="l-phone" placeholder="e.g. 0701234567"/>
-        </div>
-        <div class="rfield">
-          <label>4-Digit PIN</label>
-          <input type="password" id="l-pin" maxlength="4" placeholder="••••"/>
-        </div>
+        <div class="form-top"><h2>Welcome back</h2><p>Sign in with your phone and PIN</p></div>
+        <div class="rfield"><label>Phone Number</label><input type="tel" id="l-phone" placeholder="e.g. 0701234567" autocomplete="tel"/></div>
+        <div class="rfield"><label>4-Digit PIN</label><input type="password" id="l-pin" maxlength="4" placeholder="••••" autocomplete="current-password"/></div>
         <button class="rbtn-primary" onclick="riderLogin()">Sign In →</button>
         <p class="switch-p">New rider? <a onclick="showAuthTab('register')">Register here</a></p>
       </div>
-
       <!-- REGISTER -->
       <div id="form-register" class="aform">
-        <div class="form-top">
-          <h2>Join BodaSACCO</h2>
-          <p>Register and start your savings journey</p>
-        </div>
-        <div class="rfield">
-          <label>Full Name</label>
-          <input type="text" id="r-name" placeholder="e.g. Ssemakula John"/>
-        </div>
-        <div class="rfield">
-          <label>Phone Number</label>
-          <input type="tel" id="r-phone" placeholder="e.g. 0701234567"/>
-        </div>
-        <div class="rfield">
-          <label>Stage / Area</label>
-          <input type="text" id="r-stage" placeholder="e.g. Wandegeya Stage"/>
-        </div>
-        <div class="rfield">
-          <label>Select Your SACCO</label>
-          <select id="r-sacco"><option value="">Loading SACCOs...</option></select>
-        </div>
-        <div class="rfield">
-          <label>Create PIN (4 digits)</label>
-          <input type="password" id="r-pin" maxlength="4" placeholder="••••"/>
-        </div>
-        <button class="rbtn-primary" onclick="riderRegister()">Register →</button>
+        <div class="form-top"><h2>Join BodaSACCO</h2><p>Register and start your savings journey</p></div>
+        <div class="rfield"><label>Full Name</label><input type="text" id="r-name" placeholder="e.g. Ssemakula John"/></div>
+        <div class="rfield"><label>Phone Number</label><input type="tel" id="r-phone" placeholder="e.g. 0701234567"/></div>
+        <div class="rfield"><label>Stage / Area</label><input type="text" id="r-stage" placeholder="e.g. Wandegeya Stage"/></div>
+        <div class="rfield"><label>National ID Number</label><input type="text" id="r-nid" placeholder="e.g. CM123456789ABC"/></div>
+        <div class="rfield"><label>Select Your SACCO</label><select id="r-sacco"><option value="">Loading SACCOs...</option></select></div>
+        <div class="rfield"><label>Create PIN (4 digits)</label><input type="password" id="r-pin" maxlength="4" placeholder="••••"/></div>
+        <button class="rbtn-primary" onclick="riderRegister()">Create Account →</button>
         <p class="switch-p">Already registered? <a onclick="showAuthTab('login')">Sign in</a></p>
       </div>
-
       <div id="auth-msg" class="rmsg"></div>
     </div>
   </div>
 </div>
 
-
 <!-- ========== DASHBOARD PAGE ========== -->
 <div id="dashboard-page" class="rpage">
 
-  <!-- TOP NAV -->
-  <nav class="rider-nav">
-    <div class="rn-brand">🏍️ BodaSACCO</div>
-    <div class="rn-tabs">
-      <button class="rn-tab active" onclick="showTab('home')">🏠 Home</button>
-      <button class="rn-tab" onclick="showTab('savings')">💰 Savings</button>
-      <button class="rn-tab" onclick="showTab('loans')">🏦 Loans</button>
-      <button class="rn-tab" onclick="showTab('history')">📋 History</button>
+  <!-- NOTIFICATION TICKER -->
+  <div id="notif-bar" class="notif-bar" style="display:none">
+    <div class="notif-inner">
+      <span class="notif-pulse"></span>
+      <span id="notif-text" class="notif-text"></span>
+      <button class="notif-close" onclick="closeNotifBar()">✕</button>
     </div>
-    <div class="rn-right">
-      <div class="rn-user">
-        <div class="rn-avatar" id="rn-avatar">R</div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sb-brand">
+        <span>🏍️</span>
         <div>
-          <div class="rn-name" id="rn-name">Rider</div>
-          <div class="rn-sacco" id="rn-sacco">SACCO</div>
+          <div class="sb-name-text">BodaSACCO</div>
+          <div class="sb-sub">Rider Portal</div>
         </div>
       </div>
-      <button class="rn-logout" onclick="riderLogout()">↩ Logout</button>
-    </div>
-  </nav>
+      <div class="sb-profile">
+        <div class="sb-avatar" id="sb-avatar">R</div>
+        <div class="sb-profile-info">
+          <div class="sb-rider-name" id="sb-rider-name">Rider</div>
+          <div class="sb-sacco-name" id="sb-sacco-name">SACCO</div>
+        </div>
+      </div>
+      <nav class="sb-nav">
+        <button class="sb-btn active" onclick="showTab('home')"><span>🏠</span>Home</button>
+        <button class="sb-btn" onclick="showTab('savings')"><span>💰</span>Savings</button>
+        <button class="sb-btn" onclick="showTab('loans')"><span>🏦</span>Loans</button>
+        <button class="sb-btn" onclick="showTab('receipts')"><span>🧾</span>Receipts</button>
+        <button class="sb-btn" onclick="showTab('messages')">
+          <span>💬</span>Messages
+          <span id="msg-badge" class="msg-badge" style="display:none">0</span>
+        </button>
+        <button class="sb-btn" onclick="showTab('support')"><span>🆘</span>Support</button>
+      </nav>
+      <button class="sb-logout" onclick="riderLogout()">↩ Sign Out</button>
+    </aside>
 
-  <!-- CONTENT -->
-  <div class="rider-body">
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
 
-    <!-- ===== HOME TAB ===== -->
-    <div id="rtab-home" class="rtab active">
+      <!-- TOPBAR -->
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="topbar-title" id="topbar-title">Home</div>
+          <div class="topbar-date" id="topbar-date"></div>
+        </div>
+        <div class="topbar-right">
+          <div class="online-dot"></div>
+          <span class="online-label">Online</span>
+        </div>
+      </div>
 
-      <!-- Greeting -->
-      <div class="greeting-bar">
-        <div>
+      <!-- ===== HOME TAB ===== -->
+      <div id="rtab-home" class="rtab active">
+
+        <div class="greeting">
           <div class="greeting-text">Good day, <span id="greet-name">Rider</span> 👋</div>
-          <div class="greeting-sacco" id="greet-sacco">Your SACCO</div>
+          <div class="greeting-sub" id="greet-sacco"></div>
         </div>
-        <div class="greeting-date" id="greeting-date"></div>
-      </div>
 
-      <!-- Balance Cards -->
-      <div class="balance-cards">
-        <div class="bcard green">
-          <div class="bcard-icon">💰</div>
-          <div>
-            <div class="bcard-label">Total Savings</div>
-            <div class="bcard-val" id="hm-savings">UGX 0</div>
-          </div>
-        </div>
-        <div class="bcard blue">
-          <div class="bcard-icon">📈</div>
-          <div>
-            <div class="bcard-label">Max Loan Available</div>
-            <div class="bcard-val" id="hm-maxloan">UGX 0</div>
-          </div>
-        </div>
-        <div class="bcard gold">
-          <div class="bcard-icon">🏦</div>
-          <div>
-            <div class="bcard-label">Deposits Made</div>
-            <div class="bcard-val" id="hm-count">0</div>
-          </div>
-        </div>
-        <div class="bcard purple">
-          <div class="bcard-icon">✅</div>
-          <div>
-            <div class="bcard-label">Loans Paid</div>
-            <div class="bcard-val" id="hm-paidloans">0</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Loan Progress -->
-      <div id="loan-progress-section" style="display:none">
-        <div class="section-card">
-          <div class="sc-head">🏦 Active Loan Progress</div>
-          <div class="sc-body">
-            <div class="lp-row">
-              <div>
-                <div class="lp-label">Loan Amount</div>
-                <div class="lp-val" id="lp-amount">—</div>
-              </div>
-              <div>
-                <div class="lp-label">Total Repayable</div>
-                <div class="lp-val" id="lp-total">—</div>
-              </div>
-              <div>
-                <div class="lp-label">Amount Paid</div>
-                <div class="lp-val green" id="lp-paid">—</div>
-              </div>
-              <div>
-                <div class="lp-label">Remaining</div>
-                <div class="lp-val red" id="lp-remaining">—</div>
-              </div>
-              <div>
-                <div class="lp-label">Due Date</div>
-                <div class="lp-val" id="lp-due">—</div>
-              </div>
-              <div>
-                <div class="lp-label">Status</div>
-                <div class="lp-val" id="lp-status">—</div>
-              </div>
+        <!-- STAT CARDS -->
+        <div class="stat-cards">
+          <div class="scard scard-green">
+            <div class="scard-top">
+              <div class="scard-label">Total Savings</div>
+              <div class="scard-icon">💰</div>
             </div>
-            <div class="progress-wrap">
-              <div class="progress-bar">
-                <div class="progress-fill" id="lp-bar" style="width:0%"></div>
+            <div class="scard-val" id="hm-savings">UGX 0</div>
+            <div class="scard-sub" id="hm-savings-sub">0 deposits made</div>
+          </div>
+          <div class="scard scard-red">
+            <div class="scard-top">
+              <div class="scard-label">Loan Balance</div>
+              <div class="scard-icon">🏦</div>
+            </div>
+            <div class="scard-val" id="hm-loanbal">None</div>
+            <div class="scard-sub" id="hm-loan-sub">No active loan</div>
+          </div>
+          <div class="scard scard-gold">
+            <div class="scard-top">
+              <div class="scard-label">Deposits This Week</div>
+              <div class="scard-icon">📅</div>
+            </div>
+            <div class="scard-val" id="hm-weekdeposits">UGX 0</div>
+            <div class="scard-sub">Last 7 days</div>
+          </div>
+          <div class="scard scard-purple">
+            <div class="scard-top">
+              <div class="scard-label">Loans Paid</div>
+              <div class="scard-icon">✅</div>
+            </div>
+            <div class="scard-val" id="hm-paidloans">0</div>
+            <div class="scard-sub">Completed loans</div>
+          </div>
+        </div>
+
+        <!-- LOAN PROGRESS -->
+        <div id="loan-progress-section" style="display:none">
+          <div class="card">
+            <div class="card-head">
+              <div class="card-head-title">Active Loan Progress</div>
+              <span id="lp-status-badge" class="status-badge"></span>
+            </div>
+            <div class="card-body">
+              <div class="lp-grid">
+                <div class="lp-item"><div class="lp-label">Loan Amount</div><div class="lp-val" id="lp-amount">—</div></div>
+                <div class="lp-item"><div class="lp-label">Total Repayable</div><div class="lp-val" id="lp-total">—</div></div>
+                <div class="lp-item"><div class="lp-label">Paid So Far</div><div class="lp-val green" id="lp-paid">—</div></div>
+                <div class="lp-item"><div class="lp-label">Remaining</div><div class="lp-val red" id="lp-remaining">—</div></div>
+                <div class="lp-item"><div class="lp-label">Due Date</div><div class="lp-val" id="lp-due">—</div></div>
+                <div class="lp-item"><div class="lp-label">Monthly Payment</div><div class="lp-val" id="lp-monthly">—</div></div>
               </div>
-              <div class="progress-pct" id="lp-pct">0% repaid</div>
+              <div class="prog-wrap">
+                <div class="prog-bar"><div class="prog-fill" id="lp-bar" style="width:0%"></div></div>
+                <div class="prog-labels">
+                  <span>0%</span>
+                  <span id="lp-pct" class="prog-pct">0% repaid</span>
+                  <span>100%</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- INSIGHTS -->
+        <div id="insights-section"></div>
+
+        <!-- CHART + RECENT -->
+        <div class="two-col">
+          <div class="card">
+            <div class="card-head"><div class="card-head-title">📊 Savings Trend</div><span class="card-head-sub">Last 6 months</span></div>
+            <div class="card-body"><canvas id="riderChart" height="180"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><div class="card-head-title">🕐 Recent Transactions</div></div>
+            <div id="recent-txns" class="card-body"><p class="empty-state">No transactions yet.</p></div>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Insights -->
-      <div id="insights-section"></div>
+      <!-- ===== SAVINGS TAB ===== -->
+      <div id="rtab-savings" class="rtab">
+        <div class="page-header"><h2>💰 Savings</h2><p>Deposit money into your SACCO account</p></div>
 
-      <!-- Savings Chart -->
-      <div class="section-card">
-        <div class="sc-head">📊 Savings Trend (Last 6 Months)</div>
-        <div class="sc-body">
-          <canvas id="riderChart" height="160"></canvas>
+        <!-- Summary Bar -->
+        <div class="summary-bar">
+          <div class="sb-item"><div class="sb-val" id="sav-total">UGX 0</div><div class="sb-lbl">Total Savings</div></div>
+          <div class="sb-divider"></div>
+          <div class="sb-item"><div class="sb-val" id="sav-week">UGX 0</div><div class="sb-lbl">This Week</div></div>
+          <div class="sb-divider"></div>
+          <div class="sb-item"><div class="sb-val" id="sav-count">0</div><div class="sb-lbl">Total Deposits</div></div>
+          <div class="sb-divider"></div>
+          <div class="sb-item"><div class="sb-val" id="sav-max-loan">UGX 0</div><div class="sb-lbl">Max Loan</div></div>
+        </div>
+
+        <div class="two-col">
+          <!-- Cash -->
+          <div class="card">
+            <div class="card-head"><div class="card-head-title">💵 Cash Deposit</div></div>
+            <div class="card-body">
+              <p class="card-note">Visit your SACCO office with cash and record it here.</p>
+              <div class="rfield"><label>Amount (UGX)</label><input type="number" id="cash-amount" placeholder="e.g. 5,000"/></div>
+              <button class="rbtn-green full" onclick="cashDeposit()">Record Cash Deposit</button>
+              <div id="cash-msg" class="rmsg mt12"></div>
+            </div>
+          </div>
+          <!-- Mobile Money -->
+          <div class="card">
+            <div class="card-head"><div class="card-head-title">📱 Mobile Money</div></div>
+            <div class="card-body">
+              <p class="card-note">Pay via phone. You will receive a prompt to confirm.</p>
+              <div class="network-tabs">
+                <button class="net-tab active" id="rnet-mtn" onclick="selectRNet('mtn')">🟡 MTN MoMo</button>
+                <button class="net-tab" id="rnet-airtel" onclick="selectRNet('airtel')">🔴 Airtel Money</button>
+              </div>
+              <div class="rfield"><label>Mobile Money Phone</label><input type="tel" id="mm-phone" placeholder="e.g. 0771234567"/></div>
+              <div class="rfield"><label>Amount (UGX)</label><input type="number" id="mm-amount" placeholder="e.g. 10,000"/></div>
+              <button class="rbtn-gold full" onclick="mmDeposit()">Send Payment Request →</button>
+              <div id="mm-msg" class="rmsg mt12"></div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Recent Transactions -->
-      <div class="section-card">
-        <div class="sc-head">🕐 Recent Transactions</div>
-        <div id="recent-txns" class="sc-body">
-          <p class="rempty">No transactions yet.</p>
+      <!-- ===== LOANS TAB ===== -->
+      <div id="rtab-loans" class="rtab">
+        <div class="page-header"><h2>🏦 Loans</h2><p>Request and manage your SACCO loan</p></div>
+
+        <!-- REPAY LOAN SECTION -->
+        <div id="repay-section" style="display:none">
+          <div class="card card-urgent">
+            <div class="card-head">
+              <div class="card-head-title">💳 Repay Active Loan</div>
+              <span class="urgent-tag">Action Required</span>
+            </div>
+            <div class="card-body">
+              <div id="repay-loan-summary" class="loan-summary-box"></div>
+              <div class="pay-method-label">Choose Payment Method</div>
+              <div class="pay-methods">
+                <button class="pay-method active" id="pm-mtn" onclick="selectPayMethod('mtn')">
+                  <span class="pm-emoji">🟡</span><span class="pm-name">MTN MoMo</span>
+                </button>
+                <button class="pay-method" id="pm-airtel" onclick="selectPayMethod('airtel')">
+                  <span class="pm-emoji">🔴</span><span class="pm-name">Airtel Money</span>
+                </button>
+                <button class="pay-method" id="pm-cash" onclick="selectPayMethod('cash')">
+                  <span class="pm-emoji">💵</span><span class="pm-name">Cash</span>
+                </button>
+              </div>
+              <div id="repay-mtn-fields" class="pay-fields">
+                <div class="rfield"><label>MTN Phone Number</label><input type="tel" id="repay-mtn-phone" placeholder="e.g. 0771234567"/></div>
+              </div>
+              <div id="repay-airtel-fields" class="pay-fields" style="display:none">
+                <div class="rfield"><label>Airtel Phone Number</label><input type="tel" id="repay-airtel-phone" placeholder="e.g. 0751234567"/></div>
+              </div>
+              <div id="repay-cash-fields" class="pay-fields" style="display:none">
+                <div class="cash-note">💵 Bring cash to your SACCO office and record the amount here.</div>
+              </div>
+              <div class="rfield"><label>Repayment Amount (UGX)</label><input type="number" id="repay-amount" placeholder="e.g. 50,000"/></div>
+              <button class="rbtn-primary full" onclick="repayLoan()">✅ Confirm Repayment</button>
+              <div id="repay-msg" class="rmsg mt12"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- REQUEST LOAN -->
+        <div class="card">
+          <div class="card-head"><div class="card-head-title">➕ Request a New Loan</div></div>
+          <div class="card-body">
+            <div class="loan-rules-grid">
+              <div class="loan-rule"><div class="lr-icon">📌</div><div><div class="lr-title">Max Loan</div><div class="lr-val" id="rule-max">3× your savings</div></div></div>
+              <div class="loan-rule"><div class="lr-icon">💹</div><div><div class="lr-title">Interest Rate</div><div class="lr-val" id="rule-rate">10% flat</div></div></div>
+              <div class="loan-rule"><div class="lr-icon">⏰</div><div><div class="lr-title">Max Period</div><div class="lr-val">12 months</div></div></div>
+              <div class="loan-rule"><div class="lr-icon">🔒</div><div><div class="lr-title">Limit</div><div class="lr-val">One loan at a time</div></div></div>
+            </div>
+            <div class="two-col-fields">
+              <div class="rfield"><label>Loan Amount (UGX)</label><input type="number" id="ln-amount" placeholder="e.g. 100,000" oninput="previewLoan()"/></div>
+              <div class="rfield"><label>Repayment Period (months)</label><input type="number" id="ln-months" value="3" min="1" max="12" oninput="previewLoan()"/></div>
+            </div>
+            <div id="loan-preview" class="loan-preview-card" style="display:none"></div>
+            <button class="rbtn-primary full" onclick="requestLoan()">Submit Loan Request →</button>
+            <div id="loan-req-msg" class="rmsg mt12"></div>
+          </div>
+        </div>
+
+        <!-- ALL LOANS -->
+        <div class="card">
+          <div class="card-head"><div class="card-head-title">📋 Loan History</div></div>
+          <div id="all-loans-list" class="card-body"><p class="empty-state">No loans yet.</p></div>
         </div>
       </div>
 
+      <!-- ===== RECEIPTS TAB ===== -->
+      <div id="rtab-receipts" class="rtab">
+        <div class="page-header"><h2>🧾 E-Receipts</h2><p>Download or print receipts for all your transactions</p></div>
+        <div class="card">
+          <div class="card-head"><div class="card-head-title">All Transaction Receipts</div></div>
+          <div class="card-body">
+            <div id="receipts-list"><p class="empty-state">Loading receipts...</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== MESSAGES TAB ===== -->
+      <div id="rtab-messages" class="rtab">
+        <div class="page-header"><h2>💬 Messages</h2><p>Notifications and messages from your SACCO</p></div>
+        <div class="card">
+          <div class="card-head"><div class="card-head-title">📬 Inbox</div></div>
+          <div id="messages-list" class="card-body"><p class="empty-state">No messages yet.</p></div>
+        </div>
+      </div>
+
+      <!-- ===== SUPPORT TAB ===== -->
+      <div id="rtab-support" class="rtab">
+        <div class="page-header"><h2>🆘 Support</h2><p>Get help from your SACCO team</p></div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-head"><div class="card-head-title">📞 Contact Us</div></div>
+            <div class="card-body">
+              <div class="contact-list">
+                <a class="contact-item" href="tel:+256700000000"><div class="ci-icon ci-green">📞</div><div><div class="ci-title">Call Us</div><div class="ci-sub">+256 700 000 000</div></div><span>→</span></a>
+                <a class="contact-item" href="https://wa.me/256700000000" target="_blank"><div class="ci-icon ci-whatsapp">💬</div><div><div class="ci-title">WhatsApp</div><div class="ci-sub">Chat with support</div></div><span>→</span></a>
+                <a class="contact-item" href="mailto:support@bodasacco.com"><div class="ci-icon ci-blue">📧</div><div><div class="ci-title">Email</div><div class="ci-sub">support@bodasacco.com</div></div><span>→</span></a>
+                <div class="contact-item"><div class="ci-icon ci-gold">🕐</div><div><div class="ci-title">Working Hours</div><div class="ci-sub">Mon–Sat: 8am – 6pm</div></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><div class="card-head-title">✉️ Send Message</div></div>
+            <div class="card-body">
+              <div class="rfield"><label>Subject</label>
+                <select id="sup-subject">
+                  <option value="">-- Select issue --</option>
+                  <option value="savings">Savings issue</option>
+                  <option value="loan">Loan question</option>
+                  <option value="payment">Payment problem</option>
+                  <option value="account">Account issue</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="rfield"><label>Your Message</label><textarea id="sup-message" rows="5" placeholder="Describe your issue clearly..."></textarea></div>
+              <button class="rbtn-primary full" onclick="sendSupportMessage()">Send Message →</button>
+              <div id="sup-msg" class="rmsg mt12"></div>
+            </div>
+          </div>
+        </div>
+        <!-- FAQ -->
+        <div class="card">
+          <div class="card-head"><div class="card-head-title">❓ Frequently Asked Questions</div></div>
+          <div class="card-body">
+            <div class="faq-list">
+              <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">How do I increase my loan limit? <span class="faq-arrow">▼</span></div><div class="faq-a">Save consistently every week. Your loan limit is 3× your total savings. The more you save, the more you can borrow.</div></div>
+              <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">How long does loan approval take? <span class="faq-arrow">▼</span></div><div class="faq-a">Loan requests are reviewed by your SACCO admin. This usually takes 1–2 business days. You will receive an SMS notification when approved.</div></div>
+              <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">What happens if I miss a loan payment? <span class="faq-arrow">▼</span></div><div class="faq-a">A late penalty will be added to your balance. Contact your SACCO admin immediately if you cannot make a payment.</div></div>
+              <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">How do I change my PIN? <span class="faq-arrow">▼</span></div><div class="faq-a">Visit your SACCO office with your National ID to request a PIN change. Your admin will reset it for you.</div></div>
+              <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Is my money safe in this system? <span class="faq-arrow">▼</span></div><div class="faq-a">Yes. All transactions are recorded and you can download receipts for every transaction. Your savings are held by your SACCO.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ========== RECEIPT MODAL ========== -->
+<div id="receipt-modal" class="modal-overlay">
+  <div class="receipt-box">
+    <div class="receipt-top">
+      <div class="receipt-brand">🏍️ BodaSACCO</div>
+      <div class="receipt-label">OFFICIAL RECEIPT</div>
+      <button class="receipt-x" onclick="closeReceipt()">✕</button>
     </div>
-
-    <!-- ===== SAVINGS TAB ===== -->
-    <div id="rtab-savings" class="rtab">
-      <div class="tab-title">💰 Savings</div>
-
-      <div class="two-panels">
-
-        <!-- Cash Deposit -->
-        <div class="section-card">
-          <div class="sc-head">💵 Cash Deposit</div>
-          <div class="sc-body">
-            <p class="sc-note">Visit your SACCO office and hand in cash. Record it here.</p>
-            <div class="rfield">
-              <label>Amount (UGX)</label>
-              <input type="number" id="cash-amount" placeholder="e.g. 5000"/>
-            </div>
-            <button class="rbtn-green" onclick="cashDeposit()">Record Cash Deposit</button>
-            <div id="cash-msg" class="rmsg" style="margin-top:10px"></div>
-          </div>
-        </div>
-
-        <!-- Mobile Money -->
-        <div class="section-card">
-          <div class="sc-head">📱 Mobile Money Deposit</div>
-          <div class="sc-body">
-            <p class="sc-note">Pay directly from your phone. You'll get a prompt to confirm.</p>
-            <div class="mm-nets">
-              <div class="mm-net mtn active" id="rnet-mtn" onclick="selectRNet('mtn')">
-                <div>🟡</div><div class="mm-net-name">MTN MoMo</div>
-              </div>
-              <div class="mm-net airtel" id="rnet-airtel" onclick="selectRNet('airtel')">
-                <div>🔴</div><div class="mm-net-name">Airtel Money</div>
-              </div>
-            </div>
-            <div class="rfield">
-              <label>Mobile Money Phone</label>
-              <input type="tel" id="mm-phone" placeholder="e.g. 0771234567"/>
-            </div>
-            <div class="rfield">
-              <label>Amount (UGX)</label>
-              <input type="number" id="mm-amount" placeholder="e.g. 10000"/>
-            </div>
-            <button class="rbtn-gold" onclick="mmDeposit()">📱 Send Payment</button>
-            <div id="mm-msg" class="rmsg" style="margin-top:10px"></div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Savings Summary -->
-      <div class="section-card">
-        <div class="sc-head">📊 Your Savings Summary</div>
-        <div class="sc-body">
-          <div class="summary-row">
-            <div class="sum-box">
-              <div class="sum-val" id="sav-total">UGX 0</div>
-              <div class="sum-label">Total Saved</div>
-            </div>
-            <div class="sum-box">
-              <div class="sum-val" id="sav-count">0</div>
-              <div class="sum-label">Total Deposits</div>
-            </div>
-            <div class="sum-box">
-              <div class="sum-val" id="sav-max-loan">UGX 0</div>
-              <div class="sum-label">Max Loan Available</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <div id="receipt-content"></div>
+    <div class="receipt-actions">
+      <button class="rbtn-green" onclick="printReceipt()">🖨️ Print</button>
+      <button class="rbtn-outline" onclick="closeReceipt()">Close</button>
     </div>
-
-    <!-- ===== LOANS TAB ===== -->
-    <div id="rtab-loans" class="rtab">
-      <div class="tab-title">🏦 Loans</div>
-
-      <!-- Request Loan -->
-      <div class="section-card">
-        <div class="sc-head">➕ Request a New Loan</div>
-        <div class="sc-body">
-          <div class="loan-rules">
-            <div class="lr-item">📌 Max loan = <strong id="rule-max">3× your savings</strong></div>
-            <div class="lr-item">📌 Interest rate = <strong id="rule-rate">10%</strong></div>
-            <div class="lr-item">📌 Only one loan at a time allowed</div>
-          </div>
-          <div class="two-fields">
-            <div class="rfield">
-              <label>Loan Amount (UGX)</label>
-              <input type="number" id="ln-amount" placeholder="e.g. 100000" oninput="previewLoan()"/>
-            </div>
-            <div class="rfield">
-              <label>Repayment Period (months)</label>
-              <input type="number" id="ln-months" value="3" min="1" max="12" oninput="previewLoan()"/>
-            </div>
-          </div>
-          <div id="loan-preview" class="loan-preview-box" style="display:none"></div>
-          <button class="rbtn-primary" onclick="requestLoan()">Submit Loan Request</button>
-          <div id="loan-req-msg" class="rmsg" style="margin-top:10px"></div>
-        </div>
-      </div>
-
-      <!-- Active Loan -->
-      <div class="section-card" id="active-loan-card" style="display:none">
-        <div class="sc-head">⏳ Your Active Loan</div>
-        <div class="sc-body" id="active-loan-body"></div>
-      </div>
-
-      <!-- All Loans -->
-      <div class="section-card">
-        <div class="sc-head">📋 All My Loans</div>
-        <div id="all-loans-list" class="sc-body">
-          <p class="rempty">No loans yet.</p>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ===== HISTORY TAB ===== -->
-    <div id="rtab-history" class="rtab">
-      <div class="tab-title">📋 Transaction History</div>
-
-      <div class="section-card">
-        <div class="sc-head">💰 Savings History</div>
-        <div id="savings-history" class="sc-body">
-          <p class="rempty">Loading...</p>
-        </div>
-      </div>
-
-      <div class="section-card">
-        <div class="sc-head">🏦 Loan History</div>
-        <div id="loans-history" class="sc-body">
-          <p class="rempty">Loading...</p>
-        </div>
-      </div>
-
-    </div>
-
-  </div><!-- end rider-body -->
-</div><!-- end dashboard-page -->
+  </div>
+</div>
 
 <script src="js/rider.js"></script>
 </body>

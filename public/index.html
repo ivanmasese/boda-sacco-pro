@@ -3,291 +3,560 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BodaSACCO Pro — Admin</title>
+  <title>BodaSACCO — Chairman Panel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="css/main.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Lora:ital@0;1&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/main.css"/>  <style>
+    * { font-size: 16px; }
+    body { font-size: 16px !important; font-family: 'Outfit', sans-serif !important; line-height: 1.8 !important; }
+    h1 { font-size: 32px !important; }
+    h2 { font-size: 26px !important; }
+    h3 { font-size: 20px !important; }
+    h4 { font-size: 18px !important; }
+    p, span, div, td, th, li, a, label { font-size: 16px !important; }
+    button { font-size: 15px !important; }
+    input, select, textarea { font-size: 16px !important; }
+    .sbn { font-size: 15px !important; }
+    .sb-nav-label { font-size: 12px !important; }
+    .sc-val { font-size: 24px !important; }
+    .sc-label { font-size: 13px !important; }
+    .badge { font-size: 13px !important; }
+    .dtable th { font-size: 13px !important; }
+    .dtable td { font-size: 15px !important; }
+    .greeting-title { font-size: 28px !important; }
+    .tb-title { font-size: 22px !important; }
+    .wallet-balance-amount { font-size: 40px !important; }
+    .mstat-val { font-size: 24px !important; }
+    .mstat-label { font-size: 13px !important; }
+    .ms-btn { font-size: 15px !important; }
+    .mtable td { font-size: 15px !important; }
+    .mtable th { font-size: 13px !important; }
+    .rbtn-primary { font-size: 16px !important; }
+    .rfield label { font-size: 15px !important; }
+  </style>
 </head>
 <body>
 
-<!-- ========== LOGIN PAGE ========== -->
-<div id="login-page" class="login-page active">
+<!-- ============ LOGIN PAGE ============ -->
+<div id="login-page" class="page active">
   <div class="login-left">
-    <div class="login-brand">🏍️ BodaSACCO Pro</div>
-    <h1>Uganda's SACCO<br/>Management <em>Platform</em></h1>
-    <p>Multi-SACCO. Multi-role. Full control.</p>
-    <div class="login-features">
-      <div class="lf-item">✅ Multi-SACCO support</div>
-      <div class="lf-item">✅ Loan management</div>
-      <div class="lf-item">✅ Mobile Money integration</div>
-      <div class="lf-item">✅ SMS notifications</div>
-      <div class="lf-item">✅ Reports & analytics</div>
+    <div class="ll-brand">🏍️ BodaSACCO</div>
+    <h1>Run Your SACCO<br/><em>Like a Pro.</em></h1>
+    <p>Everything you need to manage savings, loans, collections and payments — in one place.</p>
+    <div class="ll-features">
+      <div class="ll-feat">📊 Real-time financial overview</div>
+      <div class="ll-feat">💰 Savings & loan management</div>
+      <div class="ll-feat">💳 Payments & expenses</div>
+      <div class="ll-feat">📱 Mobile money integration</div>
+      <div class="ll-feat">🔔 Smart alerts & reminders</div>
     </div>
   </div>
   <div class="login-right">
-    <div class="login-box">
-      <h2>Admin Login</h2>
-      <p>Sign in to your control panel</p>
-      <div class="lfield">
-        <label>Username</label>
-        <input type="text" id="l-user" placeholder="e.g. superadmin"/>
-      </div>
-      <div class="lfield">
-        <label>Password</label>
-        <input type="password" id="l-pass" placeholder="••••••••"/>
-      </div>
+    <div class="login-card">
+      <div class="login-icon">🏍️</div>
+      <h2>Chairman Login</h2>
+      <p>Sign in to your SACCO control panel</p>
+      <div class="lf"><label>Username</label><input type="text" id="l-user" placeholder="Your username" autocomplete="username"/></div>
+      <div class="lf"><label>Password</label><input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"/></div>
       <button class="login-btn" onclick="doLogin()">Sign In →</button>
-      <div id="login-msg" class="lmsg"></div>
-      <div class="login-hint">
-        <strong>Default logins:</strong><br/>
-        superadmin / admin1234<br/>
-        treasurer / treasurer1234
-      </div>
+      <div id="login-msg" class="amsg"></div>
+      <button class="forgot-link" onclick="showForgotPassword()">Forgot Password?</button>
+      <a href="/master.html" class="master-link">Platform Owner? →</a>
     </div>
   </div>
 </div>
 
-<!-- ========== MAIN APP ========== -->
+<!-- ============ MAIN APP ============ -->
 <div id="app" class="app-layout">
 
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
-    <div class="sb-logo">
-      <span>🏍️</span>
-      <div><span class="sb-title">BodaSACCO</span><span class="sb-sub">Pro Admin</span></div>
-    </div>
-    <div class="sb-admin" id="sb-admin-info">
-      <div class="sb-avatar" id="sb-avatar">A</div>
-      <div>
-        <div class="sb-name" id="sb-name">Admin</div>
-        <div class="sb-role" id="sb-role">Role</div>
+    <div class="sb-top">
+      <div class="sb-brand">
+        <span>🏍️</span>
+        <div>
+          <div class="sb-brand-name">BodaSACCO</div>
+          <div class="sb-brand-sub" id="sb-sacco-name">SACCO</div>
+        </div>
+      </div>
+      <div class="sb-admin-info">
+        <div class="sb-avatar" id="sb-avatar">C</div>
+        <div>
+          <div class="sb-admin-name" id="sb-admin-name">Chairman</div>
+          <div class="sb-admin-role" id="sb-admin-role">Admin</div>
+        </div>
       </div>
     </div>
+
     <nav class="sb-nav">
-      <button class="sb-btn active" onclick="goTo('dashboard')"><span>📊</span>Dashboard</button>
-      <button class="sb-btn" onclick="goTo('saccos')"><span>🏢</span>SACCOs</button>
-      <button class="sb-btn" onclick="goTo('riders')"><span>👥</span>Riders</button>
-      <button class="sb-btn" onclick="goTo('savings')"><span>💰</span>Savings</button>
-      <button class="sb-btn" onclick="goTo('loans')"><span>🏦</span>Loans</button>
-      <button class="sb-btn" onclick="goTo('reports')"><span>📈</span>Reports</button>
-      <button class="sb-btn" onclick="goTo('messages')"><span>💬</span>Messages</button>
-      <button class="sb-btn" onclick="goTo('settings')"><span>⚙️</span>Settings</button>
+      <div class="sb-nav-label">Main</div>
+      <button class="sbn active" onclick="goTo('home')"><span>🏠</span>Dashboard</button>
+      <button class="sbn" onclick="goTo('alerts')"><span>🔔</span>Urgent Actions <span id="alert-count" class="alert-badge" style="display:none">0</span></button>
+      <button class="sbn" onclick="goTo('profile')"><span>👤</span>My Profile</button>
+
+      <div class="sb-nav-label">Money</div>
+      <button class="sbn" onclick="goTo('savings')"><span>💰</span>Savings</button>
+      <button class="sbn" onclick="goTo('loans')"><span>🏦</span>Loans</button>
+      <button class="sbn" onclick="goTo('collections')"><span>📅</span>Collections</button>
+      <button class="sbn" onclick="goTo('wallet')"><span>👛</span>SACCO Wallet</button>
+
+      <div class="sb-nav-label">Operations</div>
+      <button class="sbn" onclick="goTo('riders')"><span>👥</span>Riders</button>
+      <button class="sbn" onclick="goTo('expenses')"><span>💸</span>Expenses</button>
+      <button class="sbn" onclick="goTo('payments')"><span>📱</span>Payments</button>
+      <button class="sbn" onclick="goTo('messages')"><span>💬</span>Messages</button>
+
+      <div class="sb-nav-label">Reports</div>
+      <button class="sbn" onclick="goTo('reports')"><span>📈</span>Reports</button>
+      <button class="sbn" onclick="goTo('settings')"><span>⚙️</span>Settings</button>
     </nav>
-    <div class="sb-footer">
-      <button class="sb-logout" onclick="doLogout()">↩ Logout</button>
-    </div>
+
+    <button class="sb-logout" onclick="doLogout()">↩ Sign Out</button>
   </aside>
 
-  <!-- MAIN AREA -->
+  <!-- MAIN CONTENT -->
   <main class="main-area">
+
+    <!-- TOPBAR -->
     <div class="topbar">
-      <div>
+      <div class="tb-left">
         <div class="tb-title" id="tb-title">Dashboard</div>
-        <div class="tb-breadcrumb" id="tb-breadcrumb">Overview</div>
+        <div class="tb-date" id="tb-date"></div>
       </div>
       <div class="tb-right">
-        <div class="live-indicator"><span class="live-dot"></span>Live</div>
-        <div class="tb-sacco-select" id="tb-sacco-select" style="display:none">
-          <select id="global-sacco-filter" onchange="onSaccoFilterChange()">
-            <option value="">All SACCOs</option>
-          </select>
+        <div class="tb-status">
+          <div class="status-dot"></div>
+          <span id="tb-sacco-status">Active</span>
         </div>
+        <div class="tb-plan" id="tb-plan">Starter</div>
       </div>
     </div>
 
-    <!-- ===== DASHBOARD ===== -->
-    <div id="pg-dashboard" class="page active">
-      <div class="stat-row" id="dash-stats"></div>
-      <div class="dash-grid">
-        <div class="chart-box">
-          <div class="chart-head">Savings Trend (Last 7 Days)</div>
+    <!-- SUBSCRIPTION WARNING -->
+    <div id="sub-warning" class="sub-warning" style="display:none">
+      ⚠️ <span id="sub-warning-text"></span>
+    </div>
+
+    <!-- ====== HOME / DASHBOARD ====== -->
+    <div id="pg-home" class="pg active">
+
+      <!-- GREETING -->
+      <div class="greeting">
+        <div>
+          <div class="greeting-title">Good day, <span id="greet-name">Chairman</span> 👋</div>
+          <div class="greeting-sub">Here is your SACCO status right now</div>
+        </div>
+        <button class="btn-refresh" onclick="loadDashboard()">↻ Refresh</button>
+      </div>
+
+      <!-- STAT CARDS ROW 1 -->
+      <div class="cards-grid" id="dash-cards"></div>
+
+      <!-- CHARTS ROW -->
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-head">
+            <div class="chart-title">💰 Savings Growth</div>
+            <div class="chart-tabs">
+              <button class="ctab active" onclick="switchChartTab('savings','daily',this)">Day</button>
+              <button class="ctab" onclick="switchChartTab('savings','weekly',this)">Week</button>
+              <button class="ctab" onclick="switchChartTab('savings','monthly',this)">Month</button>
+            </div>
+          </div>
           <canvas id="savingsChart" height="200"></canvas>
         </div>
-        <div class="panel">
-          <div class="panel-head"><h3>Quick Actions</h3></div>
-          <div class="quick-actions">
-            <button class="qa-btn" onclick="goTo('riders');setTimeout(()=>openModal('modal-add-rider'),200)">➕ Add Rider</button>
-            <button class="qa-btn" onclick="goTo('savings');setTimeout(()=>openModal('modal-add-saving'),200)">💰 Record Deposit</button>
-            <button class="qa-btn" onclick="goTo('loans');setTimeout(()=>openModal('modal-add-loan'),200)">🏦 New Loan</button>
-            <button class="qa-btn" onclick="goTo('saccos');setTimeout(()=>openModal('modal-add-sacco'),200)">🏢 Add SACCO</button>
+        <div class="chart-card">
+          <div class="chart-head">
+            <div class="chart-title">🏦 Loan Repayment</div>
           </div>
+          <canvas id="loanChart" height="200"></canvas>
         </div>
       </div>
-      <div class="dash-grid">
-        <div class="panel">
-          <div class="panel-head"><h3>⚠️ Overdue Loans</h3></div>
-          <div id="dash-overdue"><p class="empty">Loading...</p></div>
-        </div>
-        <div class="panel">
-          <div class="panel-head"><h3>🏆 Top Savers</h3></div>
-          <div id="dash-topSavers"><p class="empty">Loading...</p></div>
-        </div>
+
+      <!-- FINANCIAL HEALTH -->
+      <div class="health-card">
+        <div class="health-title">📊 SACCO Financial Health</div>
+        <div class="health-bars" id="health-bars"></div>
       </div>
+
+      <!-- QUICK ACTIONS -->
+      <div class="quick-actions-grid">
+        <button class="qa-card" onclick="openModal('modal-deposit')">
+          <div class="qa-icon">💰</div>
+          <div class="qa-label">Record Deposit</div>
+        </button>
+        <button class="qa-card" onclick="openModal('modal-loan-create')">
+          <div class="qa-icon">🏦</div>
+          <div class="qa-label">New Loan</div>
+        </button>
+        <button class="qa-card" onclick="openModal('modal-expense')">
+          <div class="qa-icon">💸</div>
+          <div class="qa-label">Record Expense</div>
+        </button>
+        <button class="qa-card" onclick="openModal('modal-add-rider')">
+          <div class="qa-icon">👤</div>
+          <div class="qa-label">Add Rider</div>
+        </button>
+        <button class="qa-card" onclick="openModal('modal-send-message')">
+          <div class="qa-icon">💬</div>
+          <div class="qa-label">Send Message</div>
+        </button>
+        <button class="qa-card" onclick="goTo('reports')">
+          <div class="qa-icon">📊</div>
+          <div class="qa-label">View Reports</div>
+        </button>
+      </div>
+
     </div>
 
-    <!-- ===== SACCOs ===== -->
-    <div id="pg-saccos" class="page">
-      <div class="page-actions">
-        <button class="btn-add" onclick="openModal('modal-add-sacco')" id="btn-add-sacco">➕ New SACCO</button>
-      </div>
-      <div class="panel">
-        <div class="panel-head"><h3>All SACCOs</h3></div>
-        <div id="saccos-table"></div>
-      </div>
+    <!-- ====== ALERTS / URGENT ACTIONS ====== -->
+    <div id="pg-alerts" class="pg">
+      <div class="pg-header"><h2>🔔 Urgent Actions</h2><p>Items that need your attention right now</p></div>
+      <div id="alerts-list"></div>
     </div>
 
-    <!-- ===== RIDERS ===== -->
-    <div id="pg-riders" class="page">
-      <div class="page-actions">
-        <input type="text" id="rider-search" class="search-box" placeholder="Search name or phone..." oninput="loadRiders()"/>
-        <select id="rider-status-filter" class="filter-sel" onchange="loadRiders()">
+    <!-- ====== SAVINGS ====== -->
+    <div id="pg-savings" class="pg">
+      <div class="pg-header">
+        <div><h2>💰 Savings Management</h2><p>Track all rider deposits and savings</p></div>
+        <div class="pg-actions">
+          <button class="btn-primary" onclick="openModal('modal-deposit')">➕ Record Deposit</button>
+          <button class="btn-primary btn-mm" onclick="openModal('modal-mm-deposit')">📱 Mobile Money</button>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="summary-strip" id="savings-summary"></div>
+
+      <!-- Filters -->
+      <div class="filter-bar">
+        <input type="text" id="sav-search" class="filter-input" placeholder="Search rider..." oninput="loadSavings()"/>
+        <input type="date" id="sav-from" class="filter-input" onchange="loadSavings()"/>
+        <input type="date" id="sav-to" class="filter-input" onchange="loadSavings()"/>
+        <select id="sav-method" class="filter-select" onchange="loadSavings()">
+          <option value="">All Methods</option>
+          <option value="cash">Cash</option>
+          <option value="mtn">MTN MoMo</option>
+          <option value="airtel">Airtel Money</option>
+        </select>
+      </div>
+
+      <div class="data-panel" id="savings-table"></div>
+
+      <!-- Pending Cash Requests -->
+      <div class="pg-header" style="margin-top:24px">
+        <div><h3>⏳ Pending Cash Deposit Requests</h3><p>Riders waiting for cash confirmation</p></div>
+      </div>
+      <div class="data-panel" id="deposit-requests-panel"></div>
+    </div>
+
+    <!-- ====== LOANS ====== -->
+    <div id="pg-loans" class="pg">
+      <div class="pg-header">
+        <div><h2>🏦 Loan Management</h2><p>Applications, approvals and repayments</p></div>
+        <div class="pg-actions">
+          <button class="btn-primary" onclick="openModal('modal-loan-create')">➕ New Loan</button>
+        </div>
+      </div>
+
+      <!-- Loan tabs -->
+      <div class="tab-strip">
+        <button class="tstab active" onclick="switchLoanTab('pending',this)">⏳ Pending</button>
+        <button class="tstab" onclick="switchLoanTab('active',this)">✅ Active</button>
+        <button class="tstab" onclick="switchLoanTab('overdue',this)">⚠️ Overdue</button>
+        <button class="tstab" onclick="switchLoanTab('paid',this)">🏁 Paid</button>
+        <button class="tstab" onclick="switchLoanTab('all',this)">📋 All</button>
+      </div>
+
+      <!-- Loan summary -->
+      <div class="summary-strip" id="loan-summary"></div>
+
+      <div class="data-panel" id="loans-table"></div>
+    </div>
+
+    <!-- ====== COLLECTIONS ====== -->
+    <div id="pg-collections" class="pg">
+      <div class="pg-header"><h2>📅 Daily Collections</h2><p>Track who has paid and who has not</p></div>
+      <div class="collections-grid">
+        <div class="coll-card coll-paid">
+          <div class="coll-num" id="coll-paid-num">0</div>
+          <div class="coll-lbl">Paid Today</div>
+          <div class="coll-amt" id="coll-paid-amt">UGX 0</div>
+        </div>
+        <div class="coll-card coll-missing">
+          <div class="coll-num" id="coll-missing-num">0</div>
+          <div class="coll-lbl">Missing Today</div>
+          <div class="coll-amt" id="coll-missing-amt">Expected UGX 0</div>
+        </div>
+        <div class="coll-card coll-week">
+          <div class="coll-num" id="coll-week-num">UGX 0</div>
+          <div class="coll-lbl">This Week</div>
+        </div>
+        <div class="coll-card coll-month">
+          <div class="coll-num" id="coll-month-num">UGX 0</div>
+          <div class="coll-lbl">This Month</div>
+        </div>
+      </div>
+      <div class="pg-header" style="margin-top:20px"><h3>Today's Collection List</h3></div>
+      <div class="data-panel" id="collections-table"></div>
+    </div>
+
+    <!-- ====== WALLET ====== -->
+    <div id="pg-wallet" class="pg">
+      <div class="pg-header"><h2>👛 SACCO Wallet</h2><p>Track all money in and out of the SACCO</p></div>
+      <div class="wallet-hero">
+        <div class="wallet-balance-label">Available SACCO Balance</div>
+        <div class="wallet-balance-amount" id="wallet-balance">UGX 0</div>
+        <div class="wallet-balance-sub">Total savings minus outstanding loans</div>
+      </div>
+      <div class="wallet-grid">
+        <div class="wallet-stat green"><div class="ws-icon">📥</div><div><div class="ws-val" id="wallet-in">UGX 0</div><div class="ws-lbl">Total In (Savings)</div></div></div>
+        <div class="wallet-stat red"><div class="ws-icon">📤</div><div><div class="ws-val" id="wallet-out">UGX 0</div><div class="ws-lbl">Total Out (Loans + Expenses)</div></div></div>
+        <div class="wallet-stat gold"><div class="ws-icon">💸</div><div><div class="ws-val" id="wallet-exp">UGX 0</div><div class="ws-lbl">Total Expenses</div></div></div>
+        <div class="wallet-stat blue"><div class="ws-icon">🔄</div><div><div class="ws-val" id="wallet-rep">UGX 0</div><div class="ws-lbl">Loan Repayments</div></div></div>
+      </div>
+      <div class="pg-header" style="margin-top:20px"><h3>📋 Transaction History</h3></div>
+      <div class="data-panel" id="wallet-history"></div>
+    </div>
+
+    <!-- ====== RIDERS ====== -->
+    <div id="pg-riders" class="pg">
+      <div class="pg-header">
+        <div><h2>👥 Rider Management</h2><p>All SACCO members</p></div>
+        <div class="pg-actions">
+          <button class="btn-primary" onclick="openModal('modal-add-rider')">➕ Add Rider</button>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <input type="text" id="rider-search" class="filter-input" placeholder="Search name or phone..." oninput="loadRiders()"/>
+        <select id="rider-status" class="filter-select" onchange="loadRiders()">
           <option value="">All Status</option>
           <option value="pending">Pending</option>
           <option value="approved">Approved</option>
           <option value="suspended">Suspended</option>
         </select>
-        <button class="btn-add" onclick="openModal('modal-add-rider')">➕ Add Rider</button>
       </div>
-      <div class="panel">
-        <div class="panel-head"><h3>All Riders</h3></div>
-        <div id="riders-table"></div>
-      </div>
+      <div class="data-panel" id="riders-table"></div>
     </div>
 
-    <!-- ===== SAVINGS ===== -->
-    <div id="pg-savings" class="page">
-      <div class="page-actions">
-        <input type="date" id="sav-from" class="filter-sel" onchange="loadSavings()"/>
-        <input type="date" id="sav-to"   class="filter-sel" onchange="loadSavings()"/>
-        <button class="btn-add" onclick="openModal('modal-add-saving')">💰 Record Deposit</button>
-        <button class="btn-add btn-mm" onclick="openModal('modal-mm-deposit')">📱 Mobile Money</button>
+    <!-- ====== EXPENSES ====== -->
+    <div id="pg-expenses" class="pg">
+      <div class="pg-header">
+        <div><h2>💸 Expenses</h2><p>Track all SACCO spending</p></div>
+        <div class="pg-actions">
+          <button class="btn-primary" onclick="openModal('modal-expense')">➕ Record Expense</button>
+        </div>
       </div>
-      <div class="panel">
-        <div class="panel-head"><h3>All Deposits</h3></div>
-        <div id="savings-table"></div>
-      </div>
+      <div class="summary-strip" id="expense-summary"></div>
+      <div class="expense-cats" id="expense-cats"></div>
+      <div class="data-panel" id="expenses-table"></div>
     </div>
 
-    <!-- ===== LOANS ===== -->
-    <div id="pg-loans" class="page">
-      <div class="page-actions">
-        <select id="loan-status-filter" class="filter-sel" onchange="loadLoans()">
-          <option value="">All Status</option>
-          <option value="pending">Pending</option>
-          <option value="active">Active</option>
-          <option value="overdue">Overdue</option>
-          <option value="paid">Paid</option>
-          <option value="rejected">Rejected</option>
-        </select>
-        <button class="btn-add" onclick="openModal('modal-add-loan')">🏦 New Loan</button>
+    <!-- ====== PAYMENTS ====== -->
+    <div id="pg-payments" class="pg">
+      <div class="pg-header"><h2>📱 Payments</h2><p>Pay salaries, utilities and other expenses via mobile money</p></div>
+      <div class="payments-grid">
+        <div class="pay-cat-card" onclick="openPaymentForm('salary')">
+          <div class="pcc-icon">👷</div>
+          <div class="pcc-name">Pay Salary</div>
+          <div class="pcc-sub">Staff & chairman allowance</div>
+        </div>
+        <div class="pay-cat-card" onclick="openPaymentForm('electricity')">
+          <div class="pcc-icon">💡</div>
+          <div class="pcc-name">Electricity (UMEME)</div>
+          <div class="pcc-sub">Pay meter token</div>
+        </div>
+        <div class="pay-cat-card" onclick="openPaymentForm('water')">
+          <div class="pcc-icon">💧</div>
+          <div class="pcc-name">Water (NWSC)</div>
+          <div class="pcc-sub">Pay water bill</div>
+        </div>
+        <div class="pay-cat-card" onclick="openPaymentForm('internet')">
+          <div class="pcc-icon">🌐</div>
+          <div class="pcc-name">Internet</div>
+          <div class="pcc-sub">Pay internet bill</div>
+        </div>
+        <div class="pay-cat-card" onclick="openPaymentForm('rent')">
+          <div class="pcc-icon">🏠</div>
+          <div class="pcc-name">Office Rent</div>
+          <div class="pcc-sub">Pay monthly rent</div>
+        </div>
+        <div class="pay-cat-card" onclick="openPaymentForm('fuel')">
+          <div class="pcc-icon">⛽</div>
+          <div class="pcc-name">Fuel</div>
+          <div class="pcc-sub">Fuel expenses</div>
+        </div>
+        <div class="pay-cat-card" onclick="openPaymentForm('repair')">
+          <div class="pcc-icon">🔧</div>
+          <div class="pcc-name">Bike Repairs</div>
+          <div class="pcc-sub">Maintenance costs</div>
+        </div>
+        <div class="pay-cat-card" onclick="openPaymentForm('emergency')">
+          <div class="pcc-icon">🚨</div>
+          <div class="pcc-name">Emergency</div>
+          <div class="pcc-sub">Urgent expenses</div>
+        </div>
+        <div class="pay-cat-card" onclick="openPaymentForm('other')">
+          <div class="pcc-icon">📦</div>
+          <div class="pcc-name">Other</div>
+          <div class="pcc-sub">Any other expense</div>
+        </div>
       </div>
-      <div class="panel">
-        <div class="panel-head"><h3>All Loans</h3></div>
-        <div id="loans-table"></div>
-      </div>
+      <div class="pg-header" style="margin-top:24px"><h3>Recent Payments</h3></div>
+      <div class="data-panel" id="payments-history"></div>
     </div>
 
-    <!-- ===== REPORTS ===== -->
-    <div id="pg-reports" class="page">
-      <div class="page-actions">
-        <select id="report-period" class="filter-sel" onchange="loadReports()">
+    <!-- ====== MESSAGES ====== -->
+    <div id="pg-messages" class="pg">
+      <div class="pg-header"><h2>💬 Messages</h2><p>Send SMS to your riders</p></div>
+      <div class="msg-compose">
+        <div class="filter-bar">
+          <select id="msg-target" class="filter-select" onchange="toggleMsgSacco()" style="min-width:200px">
+            <option value="all">📢 All Riders</option>
+            <option value="defaulters">⚠️ Defaulters Only</option>
+            <option value="topsavers">🏆 Top Savers</option>
+          </select>
+        </div>
+        <div class="lf" style="margin-bottom:12px">
+          <label>Message</label>
+          <textarea id="msg-text" rows="4" placeholder="Type your message here..."></textarea>
+        </div>
+        <div class="msg-templates-row">
+          <span style="font-size:0.8rem;color:var(--muted)">Quick templates:</span>
+          <button class="tpl-btn" onclick="setTpl('reminder')">💰 Save Reminder</button>
+          <button class="tpl-btn" onclick="setTpl('loan')">🏦 Loan Reminder</button>
+          <button class="tpl-btn" onclick="setTpl('meeting')">📅 Meeting Notice</button>
+          <button class="tpl-btn" onclick="setTpl('congrats')">🎉 Congratulate</button>
+        </div>
+        <button class="btn-primary" onclick="sendMsg()">📤 Send Message</button>
+        <div id="msg-result" class="amsg" style="margin-top:12px"></div>
+      </div>
+      <div class="pg-header" style="margin-top:24px"><h3>Message History</h3></div>
+      <div class="data-panel" id="msg-history"></div>
+    </div>
+
+    <!-- ====== REPORTS ====== -->
+    <div id="pg-reports" class="pg">
+      <div class="pg-header"><h2>📈 Reports & Analytics</h2><p>Financial performance overview</p></div>
+      <div class="filter-bar">
+        <select id="rpt-period" class="filter-select" onchange="loadReports()">
           <option value="day">Today</option>
           <option value="week" selected>This Week</option>
           <option value="month">This Month</option>
         </select>
-        <button class="btn-add" onclick="exportReport('savings')">⬇ Export Savings CSV</button>
-        <button class="btn-add" onclick="exportReport('loans')">⬇ Export Loans CSV</button>
+        <button class="btn-primary" onclick="exportReport('savings')">⬇ Export Savings</button>
+        <button class="btn-primary" onclick="exportReport('loans')">⬇ Export Loans</button>
       </div>
-      <div class="stat-row" id="report-stats"></div>
-      <div class="dash-grid">
-        <div class="panel">
-          <div class="panel-head"><h3>🏆 Top 5 Savers</h3></div>
-          <div id="rpt-topSavers"></div>
+      <div class="cards-grid" id="rpt-cards"></div>
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-head"><div class="chart-title">🏆 Top 5 Savers</div></div>
+          <div id="rpt-top-savers"></div>
         </div>
-        <div class="panel">
-          <div class="panel-head"><h3>⚠️ Defaulters</h3></div>
+        <div class="chart-card">
+          <div class="chart-head"><div class="chart-title">⚠️ Defaulters List</div></div>
           <div id="rpt-defaulters"></div>
         </div>
       </div>
-      <div class="panel">
-        <div class="panel-head"><h3>📊 SACCO Performance Comparison</h3></div>
-        <div id="rpt-saccos"></div>
-      </div>
     </div>
 
-    <!-- ===== MESSAGES ===== -->
-    <div id="pg-messages" class="page">
-      <div class="panel">
-        <div class="panel-head"><h3>📤 Send Message / SMS</h3></div>
-        <div class="panel-body">
-          <div class="form-row">
-            <div class="ffield">
-              <label>Send To</label>
-              <select id="msg-target" onchange="toggleSaccoSelect()">
-                <option value="all">All Riders</option>
-                <option value="sacco">Specific SACCO</option>
-                <option value="defaulters">Defaulters Only</option>
-                <option value="topsavers">Top Savers</option>
+    <!-- ====== SETTINGS ====== -->
+    <div id="pg-settings" class="pg">
+      <div class="pg-header"><h2>⚙️ SACCO Settings</h2><p>Configure your SACCO rules</p></div>
+      <div class="settings-grid">
+        <div class="set-card">
+          <h3>💰 Savings Rules</h3>
+          <div class="lf"><label>Minimum Deposit (UGX)</label><input type="number" id="set-min-dep" placeholder="e.g. 2000"/></div>
+          <div class="lf"><label>Maximum Deposit (UGX)</label><input type="number" id="set-max-dep" placeholder="e.g. 5000000"/></div>
+        </div>
+        <div class="set-card">
+          <h3>🏦 Loan Rules</h3>
+          <div class="lf"><label>Interest Rate (%)</label><input type="number" id="set-interest" placeholder="e.g. 10"/></div>
+          <div class="lf"><label>Max Loan Multiplier</label><input type="number" id="set-multiplier" placeholder="e.g. 3"/></div>
+          <div class="lf"><label>Late Penalty (%)</label><input type="number" id="set-penalty" placeholder="e.g. 5"/></div>
+          <div class="lf"><label>Dual Approval Above (UGX)</label><input type="number" id="set-dual" placeholder="e.g. 500000"/></div>
+        </div>
+        <div class="set-card">
+          <h3>🔒 Security Rules</h3>
+          <div class="lf"><label>Max Login Attempts</label><input type="number" id="set-attempts" placeholder="e.g. 3"/></div>
+          <div class="lf"><label>Lockout Duration (minutes)</label><input type="number" id="set-lockout" placeholder="e.g. 30"/></div>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="saveSettings()">💾 Save Settings</button>
+      <div id="settings-msg" class="amsg" style="margin-top:12px"></div>
+
+      <div class="pg-header" style="margin-top:24px"><h3>📋 Audit Log</h3></div>
+      <div class="data-panel" id="audit-log"></div>
+    </div>
+
+  <!-- ====== PROFILE PAGE ====== -->
+    <div id="pg-profile" class="pg">
+      <div class="pg-header"><h2>👤 My Profile</h2><p>Manage your account and security settings</p></div>
+
+      <div class="profile-layout">
+
+        <!-- Left: Profile Info -->
+        <div class="profile-left">
+          <div class="profile-avatar-card">
+            <div class="profile-big-avatar" id="profile-big-avatar">C</div>
+            <div class="profile-full-name" id="profile-full-name">Chairman</div>
+            <div class="profile-role-badge" id="profile-role-badge">Admin</div>
+            <div class="profile-sacco-name" id="profile-sacco-name">SACCO</div>
+          </div>
+          <div class="profile-info-card">
+            <div class="profile-info-title">Account Details</div>
+            <div class="profile-info-row"><span class="pir-label">Username</span><span class="pir-val" id="profile-username">—</span></div>
+            <div class="profile-info-row"><span class="pir-label">Role</span><span class="pir-val" id="profile-role">—</span></div>
+            <div class="profile-info-row"><span class="pir-label">SACCO</span><span class="pir-val" id="profile-sacco">—</span></div>
+            <div class="profile-info-row"><span class="pir-label">Plan</span><span class="pir-val" id="profile-plan">—</span></div>
+            <div class="profile-info-row"><span class="pir-label">Sub Due</span><span class="pir-val" id="profile-due">—</span></div>
+            <div class="profile-info-row"><span class="pir-label">Security</span><span class="pir-val" id="profile-security-status">—</span></div>
+          </div>
+        </div>
+
+        <!-- Right: Actions -->
+        <div class="profile-right">
+
+          <!-- Change Password -->
+          <div class="set-card">
+            <h3>🔑 Change Password</h3>
+            <p class="set-desc">Change your login password. Use a strong password that nobody else knows.</p>
+            <div class="lf"><label>Current Password</label><input type="password" id="prof-curr-pass" placeholder="Your current password"/></div>
+            <div class="lf"><label>New Password</label><input type="password" id="prof-new-pass" placeholder="Min 6 characters"/></div>
+            <div class="lf"><label>Confirm New Password</label><input type="password" id="prof-conf-pass" placeholder="Repeat new password"/></div>
+            <button class="btn-primary full" onclick="changePassword()">🔑 Change Password</button>
+            <div id="pass-change-msg" class="amsg" style="margin-top:10px"></div>
+          </div>
+
+          <!-- Security Question Setup -->
+          <div class="set-card" style="margin-top:18px">
+            <h3>🛡️ Security Question</h3>
+            <p class="set-desc">Set a secret question and answer. This is used to recover your password if you forget it. Choose something only YOU know.</p>
+            <div id="security-setup-status" class="security-status-banner"></div>
+            <div class="lf">
+              <label>Choose a Secret Question</label>
+              <select id="sec-question">
+                <option value="">-- Choose a question --</option>
+                <option value="stage">What was the name of your first boda boda stage?</option>
+                <option value="moto">What was the number plate of your first motorcycle?</option>
+                <option value="school">What primary school did you attend?</option>
+                <option value="nickname">What is your childhood nickname?</option>
+                <option value="village">What village did you grow up in?</option>
+                <option value="friend">What is the name of your closest childhood friend?</option>
+                <option value="custom">Write your own question...</option>
               </select>
             </div>
-            <div class="ffield" id="sacco-select-field" style="display:none">
-              <label>Select SACCO</label>
-              <select id="msg-sacco"></select>
+            <div id="custom-question-field" class="lf" style="display:none">
+              <label>Your Custom Question</label>
+              <input type="text" id="sec-custom-q" placeholder="e.g. What is my favourite food?"/>
             </div>
+            <div class="lf"><label>Your Secret Answer</label><input type="text" id="sec-answer" placeholder="Your answer (only you should know this)"/></div>
+            <div class="lf"><label>National ID Number (for extra security)</label><input type="text" id="sec-nid" placeholder="e.g. CM1234567890ABC"/></div>
+            <div class="lf"><label>Confirm Your Password (to save these changes)</label><input type="password" id="sec-confirm-pass" placeholder="Enter your current password"/></div>
+            <button class="btn-primary full" onclick="saveSecurityQuestion()">🛡️ Save Security Settings</button>
+            <div id="security-msg" class="amsg" style="margin-top:10px"></div>
           </div>
-          <div class="ffield">
-            <label>Message</label>
-            <textarea id="msg-text" rows="4" placeholder="Type your message here..."></textarea>
-          </div>
-          <div class="msg-templates">
-            <span class="tpl-label">Quick templates:</span>
-            <button class="tpl-btn" onclick="setTemplate('reminder')">Save Reminder</button>
-            <button class="tpl-btn" onclick="setTemplate('loan')">Loan Reminder</button>
-            <button class="tpl-btn" onclick="setTemplate('congrats')">Congratulate</button>
-          </div>
-          <button class="btn-add" onclick="sendMessage()">📤 Send SMS</button>
-          <div id="msg-result" class="lmsg" style="margin-top:12px"></div>
-        </div>
-      </div>
-      <div class="panel" style="margin-top:20px">
-        <div class="panel-head"><h3>📋 Message History</h3></div>
-        <div id="msg-history"></div>
-      </div>
-    </div>
 
-    <!-- ===== SETTINGS ===== -->
-    <div id="pg-settings" class="page">
-      <div class="dash-grid">
-        <div class="panel">
-          <div class="panel-head"><h3>⚙️ System Rules</h3></div>
-          <div class="panel-body">
-            <div class="ffield">
-              <label>Minimum Daily Savings (UGX)</label>
-              <input type="number" id="set-minSavings"/>
-            </div>
-            <div class="ffield">
-              <label>Default Interest Rate (%)</label>
-              <input type="number" id="set-interestRate"/>
-            </div>
-            <div class="ffield">
-              <label>Loan Eligibility (months of saving)</label>
-              <input type="number" id="set-eligMonths"/>
-            </div>
-            <div class="ffield">
-              <label>Late Payment Penalty (%)</label>
-              <input type="number" id="set-penalty"/>
-            </div>
-            <div class="ffield">
-              <label>Max Loan Multiplier (×savings)</label>
-              <input type="number" id="set-multiplier"/>
-            </div>
-            <button class="btn-add" onclick="saveSettings()">💾 Save Settings</button>
-            <div id="settings-msg" class="lmsg" style="margin-top:10px"></div>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="panel-head"><h3>📋 Audit Log</h3></div>
-          <div id="audit-log"></div>
         </div>
       </div>
     </div>
@@ -295,116 +564,209 @@
   </main>
 </div>
 
-<!-- =========== MODALS =========== -->
+<!-- ============ MODALS ============ -->
 
-<!-- ADD SACCO -->
-<div id="modal-add-sacco" class="modal-overlay">
+<!-- DEPOSIT -->
+<div id="modal-deposit" class="overlay">
   <div class="modal">
-    <div class="modal-head"><h3>🏢 Add New SACCO</h3><button onclick="closeModal('modal-add-sacco')">✕</button></div>
+    <div class="modal-head"><h3>💰 Record Cash Deposit</h3><button onclick="closeModal('modal-deposit')">✕</button></div>
     <div class="modal-body">
-      <div class="ffield"><label>SACCO Name</label><input type="text" id="sacco-name" placeholder="e.g. Kampala Riders SACCO"/></div>
-      <div class="ffield"><label>Location / Stage</label><input type="text" id="sacco-location" placeholder="e.g. Kampala, Old Taxi Park"/></div>
-      <div class="ffield"><label>Chairperson Name</label><input type="text" id="sacco-chair" placeholder="Full name"/></div>
-      <div class="ffield"><label>Contact Phone</label><input type="tel" id="sacco-phone" placeholder="e.g. 0701234567"/></div>
-      <button class="btn-add" onclick="addSacco()">Create SACCO</button>
-      <div id="sacco-msg" class="lmsg" style="margin-top:10px"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ADD RIDER -->
-<div id="modal-add-rider" class="modal-overlay">
-  <div class="modal">
-    <div class="modal-head"><h3>👤 Register Rider</h3><button onclick="closeModal('modal-add-rider')">✕</button></div>
-    <div class="modal-body">
-      <div class="ffield"><label>Full Name</label><input type="text" id="rider-name" placeholder="e.g. Ssemakula John"/></div>
-      <div class="ffield"><label>Phone Number</label><input type="tel" id="rider-phone" placeholder="e.g. 0701234567"/></div>
-      <div class="ffield"><label>Stage / Area</label><input type="text" id="rider-stage" placeholder="e.g. Wandegeya Stage"/></div>
-      <div class="ffield"><label>SACCO</label><select id="rider-sacco"><option value="">-- Select SACCO --</option></select></div>
-      <div class="ffield"><label>PIN (4 digits)</label><input type="password" id="rider-pin" maxlength="4" placeholder="••••"/></div>
-      <button class="btn-add" onclick="addRider()">Register Rider</button>
-      <div id="rider-msg" class="lmsg" style="margin-top:10px"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ADD SAVING (Cash) -->
-<div id="modal-add-saving" class="modal-overlay">
-  <div class="modal">
-    <div class="modal-head"><h3>💰 Record Cash Deposit</h3><button onclick="closeModal('modal-add-saving')">✕</button></div>
-    <div class="modal-body">
-      <div class="ffield"><label>Select Rider</label><select id="sav-rider"><option value="">-- Select Rider --</option></select></div>
-      <div class="ffield"><label>Amount (UGX)</label><input type="number" id="sav-amount" placeholder="e.g. 5000"/></div>
-      <div class="ffield"><label>Reference (optional)</label><input type="text" id="sav-ref" placeholder="e.g. Receipt No."/></div>
-      <button class="btn-add" onclick="addSaving()">Record Deposit</button>
-      <div id="saving-msg" class="lmsg" style="margin-top:10px"></div>
+      <div class="lf"><label>Select Rider</label><select id="dep-rider"><option value="">-- Select Rider --</option></select></div>
+      <div class="lf"><label>Amount (UGX)</label><input type="number" id="dep-amount" placeholder="e.g. 10,000"/></div>
+      <div class="lf"><label>Reference (optional)</label><input type="text" id="dep-ref" placeholder="Receipt number"/></div>
+      <button class="btn-primary full" onclick="recordDeposit()">Record Deposit</button>
+      <div id="dep-msg" class="amsg mt10"></div>
     </div>
   </div>
 </div>
 
 <!-- MOBILE MONEY DEPOSIT -->
-<div id="modal-mm-deposit" class="modal-overlay">
-  <div class="modal modal-wide">
+<div id="modal-mm-deposit" class="overlay">
+  <div class="modal">
     <div class="modal-head"><h3>📱 Mobile Money Deposit</h3><button onclick="closeModal('modal-mm-deposit')">✕</button></div>
     <div class="modal-body">
-      <div class="mm-networks">
-        <div class="mm-net mtn active" id="net-mtn" onclick="selectNetwork('mtn')">
-          <div class="mm-net-icon">🟡</div>
-          <div class="mm-net-name">MTN MoMo</div>
-        </div>
-        <div class="mm-net airtel" id="net-airtel" onclick="selectNetwork('airtel')">
-          <div class="mm-net-icon">🔴</div>
-          <div class="mm-net-name">Airtel Money</div>
-        </div>
+      <div class="mm-net-tabs">
+        <button class="mm-net active" id="mmt-mtn" onclick="selMMNet('mtn')">🟡 MTN MoMo</button>
+        <button class="mm-net" id="mmt-airtel" onclick="selMMNet('airtel')">🔴 Airtel Money</button>
       </div>
-      <div class="ffield"><label>Select Rider</label><select id="mm-rider"><option value="">-- Select Rider --</option></select></div>
-      <div class="ffield"><label>Rider's Mobile Money Phone</label><input type="tel" id="mm-phone" placeholder="e.g. 0771234567"/></div>
-      <div class="ffield"><label>Amount (UGX)</label><input type="number" id="mm-amount" placeholder="e.g. 10000"/></div>
-      <div class="mm-note">
-        📌 The rider will receive a prompt on their phone to confirm the payment.
-        Once confirmed, the deposit is automatically recorded.
-      </div>
-      <button class="btn-add btn-mm-submit" onclick="mmDeposit()">📱 Send Payment Request</button>
-      <div id="mm-msg" class="lmsg" style="margin-top:10px"></div>
+      <div class="lf"><label>Select Rider</label><select id="mm-dep-rider"><option value="">-- Select Rider --</option></select></div>
+      <div class="lf"><label>Phone Number</label><input type="tel" id="mm-dep-phone" placeholder="e.g. 0771234567"/></div>
+      <div class="lf"><label>Amount (UGX)</label><input type="number" id="mm-dep-amount" placeholder="e.g. 10,000"/></div>
+      <button class="btn-primary full" onclick="mmDepositAdmin()">📱 Send Payment Request</button>
+      <div id="mm-dep-msg" class="amsg mt10"></div>
     </div>
   </div>
 </div>
 
-<!-- ADD LOAN -->
-<div id="modal-add-loan" class="modal-overlay">
+<!-- ADD RIDER -->
+<div id="modal-add-rider" class="overlay">
   <div class="modal">
-    <div class="modal-head"><h3>🏦 Create Loan Request</h3><button onclick="closeModal('modal-add-loan')">✕</button></div>
+    <div class="modal-head"><h3>👤 Add New Rider</h3><button onclick="closeModal('modal-add-rider')">✕</button></div>
     <div class="modal-body">
-      <div class="ffield"><label>Select Rider</label><select id="loan-rider"><option value="">-- Select Rider --</option></select></div>
-      <div class="ffield"><label>Loan Amount (UGX)</label><input type="number" id="loan-amount" placeholder="e.g. 100000"/></div>
-      <div class="ffield"><label>Interest Rate (%)</label><input type="number" id="loan-interest" value="10"/></div>
-      <div class="ffield"><label>Repayment Period (months)</label><input type="number" id="loan-months" value="3"/></div>
-      <div id="loan-preview" class="loan-preview" style="display:none"></div>
-      <button class="btn-outline" onclick="previewLoan()">Preview Loan</button>
-      <button class="btn-add" onclick="addLoan()" style="margin-top:8px">Submit Loan Request</button>
-      <div id="loan-msg" class="lmsg" style="margin-top:10px"></div>
+      <div class="lf"><label>Full Name</label><input type="text" id="r-name" placeholder="e.g. Ssemakula John"/></div>
+      <div class="lf"><label>Phone Number</label><input type="tel" id="r-phone" placeholder="e.g. 0701234567"/></div>
+      <div class="lf"><label>Stage / Area</label><input type="text" id="r-stage" placeholder="e.g. Wandegeya"/></div>
+      <div class="lf"><label>National ID</label><input type="text" id="r-nid" placeholder="e.g. CM123456789"/></div>
+      <div class="lf"><label>PIN (4 digits)</label><input type="password" id="r-pin" maxlength="4" placeholder="••••"/></div>
+      <button class="btn-primary full" onclick="addRider()">Register Rider</button>
+      <div id="rider-msg" class="amsg mt10"></div>
     </div>
   </div>
 </div>
 
-<!-- REPAY LOAN -->
-<div id="modal-repay-loan" class="modal-overlay">
-  <div class="modal">
-    <div class="modal-head"><h3>✅ Record Repayment</h3><button onclick="closeModal('modal-repay-loan')">✕</button></div>
+<!-- CREATE LOAN -->
+<div id="modal-loan-create" class="overlay">
+  <div class="modal modal-wide">
+    <div class="modal-head"><h3>🏦 Create Loan</h3><button onclick="closeModal('modal-loan-create')">✕</button></div>
     <div class="modal-body">
-      <div id="repay-loan-info" class="loan-preview"></div>
-      <div class="ffield"><label>Repayment Amount (UGX)</label><input type="number" id="repay-amount" placeholder="e.g. 20000"/></div>
-      <button class="btn-add" onclick="submitRepayment()">Record Repayment</button>
-      <div id="repay-msg" class="lmsg" style="margin-top:10px"></div>
+      <div class="two-fields">
+        <div class="lf"><label>Select Rider</label><select id="loan-rider"><option value="">-- Select Rider --</option></select></div>
+        <div class="lf"><label>Loan Amount (UGX)</label><input type="number" id="loan-amount" placeholder="e.g. 500,000" oninput="previewLoan()"/></div>
+      </div>
+      <div class="two-fields">
+        <div class="lf"><label>Interest Rate (%)</label><input type="number" id="loan-interest" value="10" oninput="previewLoan()"/></div>
+        <div class="lf"><label>Repayment Months</label><input type="number" id="loan-months" value="3" oninput="previewLoan()"/></div>
+      </div>
+      <div id="loan-preview-box" class="preview-box" style="display:none"></div>
+      <div style="display:flex;gap:10px;margin-top:4px">
+        <button class="btn-outline" onclick="previewLoan()">Preview</button>
+        <button class="btn-primary" style="flex:1" onclick="createLoan()">Create Loan Request</button>
+      </div>
+      <div id="loan-create-msg" class="amsg mt10"></div>
+    </div>
+  </div>
+</div>
+
+<!-- LOAN REPAYMENT -->
+<div id="modal-repay" class="overlay">
+  <div class="modal">
+    <div class="modal-head"><h3>✅ Record Repayment</h3><button onclick="closeModal('modal-repay')">✕</button></div>
+    <div class="modal-body">
+      <div id="repay-info" class="preview-box"></div>
+      <div class="lf"><label>Amount (UGX)</label><input type="number" id="repay-amount" placeholder="Enter amount"/></div>
+      <button class="btn-primary full" onclick="submitRepayment()">Record Repayment</button>
+      <div id="repay-msg" class="amsg mt10"></div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPENSE -->
+<div id="modal-expense" class="overlay">
+  <div class="modal modal-wide">
+    <div class="modal-head"><h3>💸 Record Expense</h3><button onclick="closeModal('modal-expense')">✕</button></div>
+    <div class="modal-body">
+      <div class="two-fields">
+        <div class="lf">
+          <label>Category</label>
+          <select id="exp-category">
+            <option value="rent">🏠 Office Rent</option>
+            <option value="fuel">⛽ Fuel</option>
+            <option value="salary">👷 Salary / Allowance</option>
+            <option value="internet">🌐 Internet</option>
+            <option value="electricity">💡 Electricity</option>
+            <option value="water">💧 Water</option>
+            <option value="repair">🔧 Bike Repairs</option>
+            <option value="emergency">🚨 Emergency</option>
+            <option value="stage">🏍️ Stage Expenses</option>
+            <option value="other">📦 Other</option>
+          </select>
+        </div>
+        <div class="lf"><label>Amount (UGX)</label><input type="number" id="exp-amount" placeholder="e.g. 50,000"/></div>
+      </div>
+      <div class="two-fields">
+        <div class="lf"><label>Paid To (Person/Company)</label><input type="text" id="exp-paid-to" placeholder="e.g. Landlord, UMEME"/></div>
+        <div class="lf"><label>Payment Method</label>
+          <select id="exp-method">
+            <option value="cash">💵 Cash</option>
+            <option value="mtn">🟡 MTN MoMo</option>
+            <option value="airtel">🔴 Airtel Money</option>
+            <option value="bank">🏦 Bank Transfer</option>
+          </select>
+        </div>
+      </div>
+      <div class="lf"><label>Description / Notes</label><textarea id="exp-desc" rows="3" placeholder="What was this expense for?"></textarea></div>
+      <div class="lf"><label>Receipt Number (optional)</label><input type="text" id="exp-receipt" placeholder="Receipt or reference number"/></div>
+      <button class="btn-primary full" onclick="recordExpense()">Record Expense</button>
+      <div id="exp-msg" class="amsg mt10"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENT FORM -->
+<div id="modal-payment" class="overlay">
+  <div class="modal">
+    <div class="modal-head"><h3 id="payment-modal-title">💳 Make Payment</h3><button onclick="closeModal('modal-payment')">✕</button></div>
+    <div class="modal-body">
+      <div class="mm-net-tabs">
+        <button class="mm-net active" id="pmt-mtn" onclick="selPayNet('mtn')">🟡 MTN MoMo</button>
+        <button class="mm-net" id="pmt-airtel" onclick="selPayNet('airtel')">🔴 Airtel Money</button>
+        <button class="mm-net" id="pmt-cash" onclick="selPayNet('cash')">💵 Cash</button>
+      </div>
+      <div class="lf"><label>Recipient Name</label><input type="text" id="pmt-name" placeholder="Who are you paying?"/></div>
+      <div class="lf"><label>Phone / Account Number</label><input type="tel" id="pmt-phone" placeholder="e.g. 0771234567"/></div>
+      <div class="lf"><label>Amount (UGX)</label><input type="number" id="pmt-amount" placeholder="Enter amount"/></div>
+      <div class="lf"><label>Notes</label><input type="text" id="pmt-notes" placeholder="Payment description"/></div>
+      <button class="btn-primary full" onclick="makePayment()">Send Payment →</button>
+      <div id="pmt-msg" class="amsg mt10"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SEND MESSAGE -->
+<div id="modal-send-message" class="overlay">
+  <div class="modal">
+    <div class="modal-head"><h3>💬 Send Message</h3><button onclick="closeModal('modal-send-message')">✕</button></div>
+    <div class="modal-body">
+      <div class="lf"><label>Send To</label>
+        <select id="quick-msg-target">
+          <option value="all">All Riders</option>
+          <option value="defaulters">Defaulters Only</option>
+        </select>
+      </div>
+      <div class="lf"><label>Message</label><textarea id="quick-msg-text" rows="4" placeholder="Type your message..."></textarea></div>
+      <button class="btn-primary full" onclick="quickSendMsg()">📤 Send</button>
+      <div id="quick-msg-result" class="amsg mt10"></div>
     </div>
   </div>
 </div>
 
 <!-- RIDER PROFILE -->
-<div id="modal-rider-profile" class="modal-overlay">
+<div id="modal-rider-profile" class="overlay">
   <div class="modal modal-wide">
     <div class="modal-head"><h3>👤 Rider Profile</h3><button onclick="closeModal('modal-rider-profile')">✕</button></div>
     <div class="modal-body" id="rider-profile-body"></div>
+  </div>
+</div>
+
+<!-- FORGOT PASSWORD MODAL -->
+<div id="modal-forgot" class="overlay">
+  <div class="modal">
+    <div class="modal-head"><h3>🔑 Forgot Password</h3><button onclick="closeModal('modal-forgot')">✕</button></div>
+    <div class="modal-body">
+      <div class="forgot-steps">
+        <!-- Step 1: Enter username -->
+        <div id="forgot-step1">
+          <p style="color:var(--muted);font-size:0.88rem;margin-bottom:16px;line-height:1.6">
+            Enter your username and we will show you a security question to verify your identity.
+          </p>
+          <div class="lf"><label>Your Username</label><input type="text" id="forgot-username" placeholder="Enter your username"/></div>
+          <button class="btn-primary full" onclick="forgotStep1()">Next →</button>
+          <div id="forgot-msg1" class="amsg" style="margin-top:10px"></div>
+        </div>
+        <!-- Step 2: Security question -->
+        <div id="forgot-step2" style="display:none">
+          <div class="security-question-box" id="security-q-box"></div>
+          <div class="lf"><label>Your Answer</label><input type="text" id="forgot-answer" placeholder="Type your answer"/></div>
+          <button class="btn-primary full" onclick="forgotStep2()">Verify →</button>
+          <div id="forgot-msg2" class="amsg" style="margin-top:10px"></div>
+        </div>
+        <!-- Step 3: Show password -->
+        <div id="forgot-step3" style="display:none">
+          <div class="password-reveal-box" id="password-reveal-box"></div>
+          <button class="btn-primary full" style="margin-top:14px" onclick="closeModal('modal-forgot')">Done — Go Login</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
