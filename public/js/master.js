@@ -9,9 +9,18 @@ function toggleSidebar() {
 function closeSidebar() {
   const sidebar = document.getElementById('msidebar');
   const overlay = document.getElementById('sidebarOverlay');
-  sidebar.classList.remove('open');
-  overlay.classList.remove('show');
+  if (sidebar) sidebar.classList.remove('open');
+  if (overlay) overlay.classList.remove('show');
 }
+
+// Close sidebar when nav button clicked on mobile
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.ms-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (window.innerWidth <= 900) closeSidebar();
+    });
+  });
+});
 
 // ============================================================
 // BodaSACCO Master Admin Panel — JavaScript
@@ -291,11 +300,15 @@ async function createSacco() {
 // ============================================================
 async function viewSacco(saccoId) {
   try {
+    // Show loading in modal first
+    const body = document.getElementById('sacco-detail-body');
+    body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">⏳ Loading...</div>';
+    openModal('modal-sacco-detail');
+
     const saccos = await mapi('/api/master/saccos');
     const s      = saccos.find(sc => sc.id === saccoId);
-    if (!s) return;
+    if (!s) { body.innerHTML = '<div style="color:var(--red);padding:20px">SACCO not found.</div>'; return; }
 
-    const body = document.getElementById('sacco-detail-body');
     const daysLeft = s.subscriptionDueDate
       ? Math.ceil((new Date(s.subscriptionDueDate) - new Date()) / (1000 * 60 * 60 * 24))
       : 0;
@@ -383,7 +396,10 @@ async function viewSacco(saccoId) {
       if (credsEl) credsEl.innerHTML = '<span style="color:var(--red)">Failed to load credentials.</span>';
     }
 
-  } catch(err) { console.error(err); }
+  } catch(err) { 
+    console.error('viewSacco error:', err);
+    alert('Error loading SACCO details: ' + err.message);
+  }
 }
 
 // ============================================================

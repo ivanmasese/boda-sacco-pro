@@ -185,6 +185,18 @@ function populateRiderDropdowns() {
 // ============================================================
 async function loadDashboard() {
   try {
+    // Always fetch fresh data from server first
+    const [riders, savings, loans, expenses] = await Promise.all([
+      api('/api/riders'),
+      api('/api/savings'),
+      api('/api/loans'),
+      api('/api/expenses')
+    ]);
+    ALL_RIDERS   = riders;
+    ALL_SAVINGS  = savings;
+    ALL_LOANS    = loans;
+    ALL_EXPENSES = expenses;
+
     const d = await api('/api/dashboard');
     CHART_DATA = d;
 
