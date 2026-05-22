@@ -145,3 +145,96 @@ body, input, select, textarea, button {
 .set-card h3 { font-size: 17px !important; }
 .profile-full-name { font-size: 20px !important; }
 .preview-box { font-size: 15px !important; }
+
+/* ===== COMPREHENSIVE MOBILE FIX ===== */
+@media (max-width: 768px) {
+
+  /* Fix login page */
+  #login-page {
+    flex-direction: column !important;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .login-left {
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 30px 20px !important;
+  }
+  .login-left h1 { font-size: 1.8rem !important; }
+  .login-left p { font-size: 0.9rem !important; }
+  .login-feature { font-size: 0.85rem !important; }
+  .login-right {
+    width: 100% !important;
+    padding: 20px 16px 40px !important;
+    min-height: auto !important;
+  }
+  .login-box {
+    padding: 24px 18px !important;
+    border-radius: 16px !important;
+  }
+  .login-box h2 { font-size: 1.4rem !important; }
+
+  /* Fix sidebar on mobile — hide completely on login page */
+  #login-page .sidebar,
+  #login-page ~ .sidebar { display: none !important; }
+
+  /* Sidebar slide in */
+  .sidebar {
+    position: fixed !important;
+    left: -260px !important;
+    top: 0 !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    transition: left 0.3s ease !important;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.4) !important;
+    overflow-y: auto !important;
+  }
+  .sidebar.open { left: 0 !important; }
+  .main-area { margin-left: 0 !important; }
+
+  /* Topbar */
+  .topbar { padding: 0 12px !important; height: 52px !important; }
+  .tb-title { font-size: 16px !important; }
+  .tb-date { display: none !important; }
+
+  /* Cards */
+  .cards-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+  .sc-val { font-size: 18px !important; }
+  .sc-label { font-size: 11px !important; }
+
+  /* Tables scroll horizontally */
+  .table-wrap { overflow-x: auto !important; }
+  .dtable { min-width: 500px !important; font-size: 13px !important; }
+
+  /* Forms */
+  .lf input, .lf select, .lf textarea {
+    font-size: 16px !important;
+    padding: 12px !important;
+  }
+  .btn-primary { width: 100% !important; padding: 13px !important; font-size: 16px !important; }
+  .two-fields { grid-template-columns: 1fr !important; }
+  .filter-row { flex-direction: column !important; gap: 8px !important; }
+  .filter-input, .filter-select { width: 100% !important; }
+
+  /* Charts */
+  .charts-row { grid-template-columns: 1fr !important; }
+  .quick-actions-grid { grid-template-columns: repeat(3, 1fr) !important; }
+
+  /* Modal */
+  .modal-box {
+    width: 95vw !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    padding: 18px !important;
+  }
+
+  /* Page content padding */
+  .page { padding: 14px !important; }
+  .pg-header { flex-direction: column !important; gap: 10px !important; align-items: flex-start !important; }
+
+  /* Summary strip */
+  .summary-strip { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Hamburger */
+  .hamburger { display: block !important; }
+}

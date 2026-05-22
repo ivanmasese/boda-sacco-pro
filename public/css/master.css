@@ -311,3 +311,57 @@ body, input, select, textarea, button { font-size: 16px !important; }
   .mtable th, .mtable td { padding: 8px 10px !important; }
   .mfilter-row { flex-direction: column; gap: 8px; }
 }
+
+/* ===== COMPREHENSIVE MOBILE FIX ===== */
+@media (max-width: 768px) {
+
+  /* Master login page */
+  .master-login-wrap, .mlogin-wrap {
+    flex-direction: column !important;
+    padding: 20px !important;
+  }
+
+  /* Sidebar slide in */
+  .msidebar {
+    position: fixed !important;
+    left: -260px !important;
+    top: 0 !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    transition: left 0.3s ease !important;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.4) !important;
+    overflow-y: auto !important;
+  }
+  .msidebar.open { left: 0 !important; }
+  .mmain { margin-left: 0 !important; }
+
+  /* Topbar */
+  .mtopbar { padding: 0 12px !important; height: 52px !important; }
+  .mtopbar-title { font-size: 16px !important; }
+
+  /* Stats */
+  .mstats-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+  .mstat-val { font-size: 20px !important; }
+
+  /* Tables */
+  .mtable-wrap { overflow-x: auto !important; }
+  .mtable { min-width: 500px !important; font-size: 13px !important; }
+
+  /* Forms */
+  .mfield input, .mfield select { font-size: 16px !important; padding: 12px !important; }
+  .mbtn-add { width: 100% !important; padding: 13px !important; }
+
+  /* Modal */
+  .mmodal-box {
+    width: 95vw !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    padding: 18px !important;
+  }
+
+  /* Hamburger */
+  .hamburger { display: block !important; }
+
+  /* Overlay */
+  .sidebar-overlay.show { display: block !important; }
+}

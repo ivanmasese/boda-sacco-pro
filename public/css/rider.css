@@ -680,3 +680,40 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
   .rcards-grid{grid-template-columns:1fr 1fr !important}
   .rider-topbar{padding:12px 16px}
 }
+
+/* ===== COMPREHENSIVE MOBILE FIX ===== */
+@media (max-width: 768px) {
+  body { overflow-x: hidden !important; }
+
+  .rider-login-wrap {
+    flex-direction: column !important;
+    padding: 20px !important;
+    min-height: 100vh !important;
+  }
+  .rider-login-left { width: 100% !important; padding: 24px 16px !important; }
+  .rider-login-right { width: 100% !important; padding: 20px 16px !important; }
+
+  .rider-topbar { padding: 10px 14px !important; }
+  .rcards-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+  .rider-page { padding: 14px !important; }
+
+  .rfield input, .rfield select {
+    font-size: 16px !important;
+    padding: 12px !important;
+  }
+  .rbtn-primary { width: 100% !important; padding: 14px !important; font-size: 16px !important; }
+
+  /* Bottom nav for rider */
+  .rider-nav {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important; right: 0 !important;
+    background: var(--surface) !important;
+    border-top: 1px solid var(--border) !important;
+    display: flex !important;
+    justify-content: space-around !important;
+    padding: 6px 0 !important;
+    z-index: 100 !important;
+  }
+  .rider-main { padding-bottom: 70px !important; }
+}
