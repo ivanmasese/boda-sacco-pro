@@ -33,7 +33,7 @@ if (!fs.existsSync(DB)) {
       },
       setupFee:300000, trialDays:14, smsCostPerUnit:50, smsMarkupPerUnit:120
     },
-    saccos:[], admins:[], riders:[], savings:[], loans:[], repayments:[],
+    saccos:[], admins:[], riders:[], savings:[], loans:[], repayments:[], expenses:[],
     messages:[], auditLog:[], loginAttempts:{}, depositRequests:[],
     subscriptionPayments:[], supportTickets:[]
   };
@@ -913,6 +913,38 @@ app.get("/api/reports/export", requireAdmin, (req, res) => {
 });
 
 // MESSAGES — P2: only their SACCO
+
+// ============================================================
+// EXPENSES
+// ============================================================
+app.get("/api/expenses", requireAdmin, (req, res) => {
+  const db = readDB();
+  const saccoId = adminSessions[req.headers['x-admin-token']]?.saccoId;
+  const expenses = (db.expenses || []).filter(e => e.saccoId === saccoId);
+  res.json(expenses);
+});
+
+app.post("/api/expenses", requireAdmin, (req, res) => {
+  const db = readDB();
+  const saccoId = adminSessions[req.headers['x-admin-token']]?.saccoId;
+  const admin   = adminSessions[req.headers['x-admin-token']];
+  const { category, amount, paidTo, method, description, receipt } = req.body;
+  if (!category || !amount || amount <= 0) return res.status(400).json({ error: 'Category and amount required.' });
+  if (!db.expenses) db.expenses = [];
+  const expense = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    saccoId, category, amount: Number(amount),
+    paidTo: paidTo || '', method: method || 'cash',
+    description: description || '', receipt: receipt || '',
+    date: new Date().toISOString(),
+    recordedBy: admin?.name || 'Admin'
+  };
+  db.expenses.push(expense);
+  db.auditLog.unshift({ id: genId(), actor: admin?.name, saccoId, action: 'EXPENSE', details: `UGX ${amount} — ${category}`, timestamp: new Date().toISOString() });
+  writeDB(db);
+  res.json(expense);
+});
+
 app.post("/api/messages", requireAdmin, (req, res) => {
   const { target, message } = req.body;
   if (!message) return res.status(400).json({ error: "Message required." });
