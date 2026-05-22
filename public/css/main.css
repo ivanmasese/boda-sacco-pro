@@ -68,9 +68,9 @@ html{font-size:16px}body{font-family:'Outfit',sans-serif;background:var(--bg);co
 /* ===== SIDEBAR ===== */
 .sidebar{
   width:240px;background:var(--sidebar);
-  min-height:100vh;display:flex;flex-direction:column;
-  position:fixed;top:0;left:0;z-index:100;
-  overflow-y:auto
+  height:100vh;display:flex;flex-direction:column;
+  position:sticky;top:0;left:0;z-index:100;
+  overflow-y:auto;flex-shrink:0
 }
 .sb-top{border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:4px}
 .sb-brand{display:flex;align-items:center;gap:10px;padding:14px 14px;font-size:1.3rem}
@@ -92,7 +92,7 @@ html{font-size:16px}body{font-family:'Outfit',sans-serif;background:var(--bg);co
 .sb-logout:hover{border-color:var(--red2);color:var(--red2)}
 
 /* ===== MAIN AREA ===== */
-.main-area{margin-left:240px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+.main-area{flex:1;display:flex;flex-direction:column;min-height:100vh;min-width:0}
 .topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:0 1px 0 var(--border)}
 .tb-title{font-family:'Outfit',sans-serif;font-weight:700;font-size:1rem}
 .tb-date{font-size:0.75rem;color:var(--muted);margin-top:2px}
@@ -315,21 +315,7 @@ html{font-size:16px}body{font-family:'Outfit',sans-serif;background:var(--bg);co
   .expense-cats{grid-template-columns:repeat(3,1fr)}
   .health-bars{grid-template-columns:1fr}
 }
-@media(max-width:900px){
-  #login-page{flex-direction:column}
-  .login-left{width:100%;padding:32px 24px}
-  .login-left h1{font-size:2.2rem}
-  .login-right{width:100%;padding:24px 16px}
-  .sidebar{display:none}
-  .main-area{margin-left:0}
-  .charts-row{grid-template-columns:1fr}
-  .wallet-grid{grid-template-columns:1fr 1fr}
-  .collections-grid{grid-template-columns:1fr 1fr}
-  .payments-grid{grid-template-columns:1fr 1fr}
-  .settings-grid{grid-template-columns:1fr}
-  .two-fields{grid-template-columns:1fr}
-  .quick-actions-grid{grid-template-columns:repeat(3,1fr)}
-}
+/* old mobile query removed — see new one below */
 
 
 /* ===== MOBILE HAMBURGER & SIDEBAR ===== */
@@ -370,9 +356,10 @@ html{font-size:16px}body{font-family:'Outfit',sans-serif;background:var(--bg);co
     transition: left 0.3s ease !important;
     box-shadow: 4px 0 20px rgba(0,0,0,0.4) !important;
     overflow-y: auto !important;
+    display: flex !important;
   }
   .sidebar.open { left: 0 !important; }
-  .main-area { margin-left: 0 !important; }
+  .main-area { margin-left: 0 !important; width: 100% !important; }
 
   .topbar { padding: 0 10px !important; }
   .tb-date { display: none !important; }
