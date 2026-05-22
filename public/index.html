@@ -68,6 +68,7 @@
 
 <!-- ============ MAIN APP ============ -->
 <div id="app" class="app-layout">
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
@@ -119,6 +120,7 @@
 
     <!-- TOPBAR -->
     <div class="topbar">
+      <button class="hamburger" onclick="toggleSidebar()">☰</button>
       <div class="tb-left">
         <div class="tb-title" id="tb-title">Dashboard</div>
         <div class="tb-date" id="tb-date"></div>
