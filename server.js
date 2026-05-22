@@ -13,7 +13,33 @@ const bcrypt  = require("bcryptjs");
 
 const app  = express();
 const PORT = 3000;
-const DB   = path.join(__dirname, "data", "db.json");
+// Use /opt/render/project/data on Render, local data folder otherwise
+const DATA_DIR = process.env.RENDER ? '/opt/render/project/src/data' : path.join(__dirname, "data");
+const DB = path.join(DATA_DIR, "db.json");
+
+// Make sure data directory exists
+if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+
+// If db.json does not exist yet, create a fresh one
+if (!fs.existsSync(DB)) {
+  const fresh = {
+    masterAdmin: { username: "master", password: "master2026", name: "Platform Owner", email: "owner@bodasacco.com" },
+    platformSettings: {
+      platformName: "BodaSACCO Pro", currency: "UGX",
+      plans: {
+        starter: { name:"Starter", maxRiders:100,  price:100000, description:"Up to 100 riders" },
+        growth:  { name:"Growth",  maxRiders:500,  price:200000, description:"Up to 500 riders" },
+        pro:     { name:"Pro",     maxRiders:2000, price:400000, description:"Up to 2000 riders" }
+      },
+      setupFee:300000, trialDays:14, smsCostPerUnit:50, smsMarkupPerUnit:120
+    },
+    saccos:[], admins:[], riders:[], savings:[], loans:[], repayments:[],
+    messages:[], auditLog:[], loginAttempts:{}, depositRequests:[],
+    subscriptionPayments:[], supportTickets:[]
+  };
+  fs.writeFileSync(DB, JSON.stringify(fresh, null, 2));
+  console.log("Fresh database created at", DB);
+}
 const BACKUP_DIR = path.join(__dirname, "backups");
 
 if (!fs.existsSync(BACKUP_DIR)) fs.mkdirSync(BACKUP_DIR);
