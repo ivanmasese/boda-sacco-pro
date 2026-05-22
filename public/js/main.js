@@ -131,14 +131,12 @@ async function doLogout() {
 // ============================================================
 async function loadAllData() {
   try {
-    [ALL_RIDERS, ALL_SAVINGS, ALL_LOANS] = await Promise.all([
+    [ALL_RIDERS, ALL_SAVINGS, ALL_LOANS, ALL_EXPENSES] = await Promise.all([
       api('/api/riders'),
       api('/api/savings'),
-      api('/api/loans')
+      api('/api/loans'),
+      api('/api/expenses')
     ]);
-    // Load expenses from localStorage (since no server route yet, we simulate)
-    const stored = localStorage.getItem('expenses_' + (ADMIN?.saccoId || 'default'));
-    ALL_EXPENSES = stored ? JSON.parse(stored) : [];
     updateAlertCount();
   } catch(err) { console.error('Data load error:', err); }
 }
@@ -884,9 +882,8 @@ async function recordExpense() {
   if (!amount || !category) return showMsg('exp-msg', 'Category and amount required.', 'error');
   try {
     showMsg('exp-msg', '⏳ Recording...', 'info');
-    const expense = { id: Date.now().toString(), category, amount: parseFloat(amount), paidTo, method, description, receipt, date: new Date().toISOString(), recordedBy: ADMIN?.name };
+    const expense = await api('/api/expenses', 'POST', { category, amount: parseFloat(amount), paidTo, method, description, receipt });
     ALL_EXPENSES.push(expense);
-    localStorage.setItem('expenses_' + (ADMIN?.saccoId || 'default'), JSON.stringify(ALL_EXPENSES));
     showMsg('exp-msg', '✅ Expense recorded!', 'success');
     ['exp-amount','exp-paid-to','exp-desc','exp-receipt'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
     loadExpenses();
