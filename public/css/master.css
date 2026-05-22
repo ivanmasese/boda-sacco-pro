@@ -267,3 +267,42 @@ body, input, select, textarea, button { font-size: 16px !important; }
 .sbadge { font-size: 13px !important; padding: 4px 12px !important; }
 .credentials-box { font-size: 16px !important; line-height: 2.2 !important; }
 .login-wrap h1 { font-size: 26px !important; }
+
+/* ===== MOBILE SIDEBAR ===== */
+.hamburger{display:none}
+@media(max-width:900px){
+  .msidebar{
+    position:fixed;
+    left:-260px;
+    top:0;
+    height:100vh;
+    z-index:1000;
+    transition:left 0.3s ease;
+    box-shadow:4px 0 20px rgba(0,0,0,0.3);
+  }
+  .msidebar.open{left:0}
+  .sidebar-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.5);
+    z-index:999;
+  }
+  .sidebar-overlay.show{display:block}
+  .hamburger{
+    display:flex !important;
+    align-items:center;
+    justify-content:center;
+    width:40px;height:40px;
+    background:transparent;
+    border:none;
+    cursor:pointer;
+    font-size:24px;
+    color:#fff;
+    margin-right:8px;
+  }
+  .mmain{margin-left:0 !important}
+  .mstats-grid{grid-template-columns:1fr 1fr !important}
+  .mtable{font-size:13px}
+  .mtable th,.mtable td{padding:8px 10px}
+}

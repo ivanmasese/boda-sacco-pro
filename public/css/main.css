@@ -328,16 +328,61 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);font
   .login-left{width:100%;padding:32px 24px}
   .login-left h1{font-size:2.2rem}
   .login-right{width:100%;padding:24px 16px}
-  .sidebar{display:none}
+
+  /* Sidebar hidden by default on mobile */
+  .sidebar{
+    position:fixed;
+    left:-260px;
+    top:0;
+    height:100vh;
+    z-index:1000;
+    transition:left 0.3s ease;
+    box-shadow:4px 0 20px rgba(0,0,0,0.3);
+  }
+  .sidebar.open{left:0}
+
+  /* Overlay behind sidebar */
+  .sidebar-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.5);
+    z-index:999;
+  }
+  .sidebar-overlay.show{display:block}
+
+  /* Hamburger button */
+  .hamburger{
+    display:flex !important;
+    align-items:center;
+    justify-content:center;
+    width:40px;height:40px;
+    background:transparent;
+    border:none;
+    cursor:pointer;
+    font-size:24px;
+    color:var(--text);
+    margin-right:8px;
+  }
+
   .main-area{margin-left:0}
   .charts-row{grid-template-columns:1fr}
-  .wallet-grid{grid-template-columns:1fr 1fr}
-  .collections-grid{grid-template-columns:1fr 1fr}
-  .payments-grid{grid-template-columns:1fr 1fr}
+  .wallet-grid{grid-template-columns:1fr}
+  .collections-grid{grid-template-columns:1fr}
+  .payments-grid{grid-template-columns:1fr}
   .settings-grid{grid-template-columns:1fr}
   .two-fields{grid-template-columns:1fr}
-  .quick-actions-grid{grid-template-columns:repeat(3,1fr)}
+  .quick-actions-grid{grid-template-columns:repeat(2,1fr)}
+  .cards-grid{grid-template-columns:1fr 1fr}
+  .dtable{font-size:13px}
+  .dtable th,.dtable td{padding:8px 10px}
+  .pg-header{flex-direction:column;gap:10px;align-items:flex-start}
+  .filter-row{flex-direction:column;gap:8px}
+  .filter-input,.filter-select{width:100%}
 }
+
+/* Hamburger hidden on desktop */
+.hamburger{display:none}
 
 /* ===== FORGOT PASSWORD ===== */
 .forgot-link{background:transparent;border:none;color:var(--muted);font-family:'Outfit',sans-serif;font-size:0.82rem;cursor:pointer;text-align:center;width:100%;margin-top:6px;padding:4px;transition:color 0.2s}
