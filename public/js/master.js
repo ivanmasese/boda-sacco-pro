@@ -1,3 +1,18 @@
+
+// ===== MOBILE SIDEBAR TOGGLE =====
+function toggleSidebar() {
+  const sidebar = document.getElementById('msidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('show');
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('msidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  sidebar.classList.remove('open');
+  overlay.classList.remove('show');
+}
+
 // ============================================================
 // BodaSACCO Master Admin Panel — JavaScript
 // ============================================================
