@@ -238,11 +238,25 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 .empty-m{color:var(--muted);text-align:center;padding:24px;font-size:1rem}
 
 @media(max-width:900px){
-  .msidebar{display:none}
-  .mmain{margin-left:0}
+  .msidebar{
+    position:fixed !important;
+    left:-260px !important;
+    top:0;height:100vh;
+    z-index:9999;
+    transition:left 0.3s ease;
+    box-shadow:4px 0 20px rgba(0,0,0,0.4);
+    overflow-y:auto;
+  }
+  .msidebar.open{left:0 !important}
+  .mmain{margin-left:0 !important}
   .mstat-grid{grid-template-columns:1fr 1fr}
   .mtwo-col{grid-template-columns:1fr}
   .mform-row{grid-template-columns:1fr}
+  .hamburger{display:block !important}
+  .mpg{padding:14px}
+  .mtopbar{padding:0 12px}
+  .mpage-actions{flex-direction:column;align-items:stretch}
+  .mbtn-add{width:100%}
 }
 
 /* ===== GLOBAL FONT SIZE OVERRIDE ===== */
