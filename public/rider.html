@@ -100,7 +100,8 @@
 
   <!-- SIDEBAR -->
   <div class="layout">
-    <aside class="sidebar">
+    <div class="sidebar-overlay" id="riderOverlay" onclick="closeRiderSidebar()"></div>
+    <aside class="sidebar" id="riderSidebar">
       <div class="sb-brand">
         <span>🏍️</span>
         <div>
@@ -116,15 +117,15 @@
         </div>
       </div>
       <nav class="sb-nav">
-        <button class="sb-btn active" onclick="showTab('home')"><span>🏠</span>Home</button>
-        <button class="sb-btn" onclick="showTab('savings')"><span>💰</span>Savings</button>
-        <button class="sb-btn" onclick="showTab('loans')"><span>🏦</span>Loans</button>
-        <button class="sb-btn" onclick="showTab('receipts')"><span>🧾</span>Receipts</button>
-        <button class="sb-btn" onclick="showTab('messages')">
+        <button class="sb-btn active" onclick="showTab('home');closeRiderSidebar()"><span>🏠</span>Home</button>
+        <button class="sb-btn" onclick="showTab('savings');closeRiderSidebar()"><span>💰</span>Savings</button>
+        <button class="sb-btn" onclick="showTab('loans');closeRiderSidebar()"><span>🏦</span>Loans</button>
+        <button class="sb-btn" onclick="showTab('receipts');closeRiderSidebar()"><span>🧾</span>Receipts</button>
+        <button class="sb-btn" onclick="showTab('messages');closeRiderSidebar()">
           <span>💬</span>Messages
           <span id="msg-badge" class="msg-badge" style="display:none">0</span>
         </button>
-        <button class="sb-btn" onclick="showTab('support')"><span>🆘</span>Support</button>
+        <button class="sb-btn" onclick="showTab('support');closeRiderSidebar()"><span>🆘</span>Support</button>
       </nav>
       <button class="sb-logout" onclick="riderLogout()">↩ Sign Out</button>
     </aside>
@@ -134,6 +135,7 @@
 
       <!-- TOPBAR -->
       <div class="topbar">
+        <button class="hamburger" onclick="toggleRiderSidebar()">☰</button>
         <div class="topbar-left">
           <div class="topbar-title" id="topbar-title">Home</div>
           <div class="topbar-date" id="topbar-date"></div>
