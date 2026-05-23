@@ -1,3 +1,15 @@
+
+/* ===== HAMBURGER BUTTON ===== */
+.hamburger{
+  display:none;
+  background:transparent;
+  border:none;
+  font-size:26px;
+  cursor:pointer;
+  color:var(--text);
+  padding:4px 8px;
+  line-height:1;
+}
 html{font-size:20px;}
 /* ============================================================
    BodaSACCO Rider Portal — Premium Redesign
@@ -207,9 +219,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 /* ===== SIDEBAR ===== */
 .sidebar{
   width:230px;background:var(--sidebar-bg);
-  min-height:100vh;display:flex;flex-direction:column;
-  position:fixed;top:0;left:0;z-index:50;
-  padding-bottom:20px
+  height:100vh;display:flex;flex-direction:column;
+  position:sticky;top:0;left:0;z-index:50;
+  flex-shrink:0;padding-bottom:20px;overflow-y:auto
 }
 .sb-brand{
   display:flex;align-items:center;gap:10px;
@@ -271,7 +283,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 
 /* ===== MAIN CONTENT ===== */
 .main-content{
-  margin-left:230px;flex:1;
+  flex:1;min-width:0;
   display:flex;flex-direction:column;
   min-height:100vh
 }
@@ -640,8 +652,21 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
   .auth-left{width:100%;padding:36px 28px}
   .auth-left h1{font-size:2.2rem}
   .auth-right{width:100%;padding:28px 20px}
-  .sidebar{display:none}
+  .sidebar{
+    position:fixed !important;
+    left:-240px !important;
+    top:0 !important;
+    height:100vh !important;
+    z-index:9999 !important;
+    transition:left 0.3s ease !important;
+    box-shadow:4px 0 20px rgba(0,0,0,0.4) !important;
+    display:flex !important;
+  }
+  .sidebar.open{ left:0 !important; }
   .main-content{margin-left:0}
+  .hamburger{ display:block !important; }
+  .sidebar-overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:998; }
+  .sidebar-overlay.show{ display:block; }
   .stat-cards{grid-template-columns:1fr 1fr}
   .two-col{grid-template-columns:1fr}
   .loan-rules-grid{grid-template-columns:1fr 1fr}
