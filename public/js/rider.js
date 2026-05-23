@@ -1,3 +1,19 @@
+
+// ===== MOBILE SIDEBAR TOGGLE =====
+function toggleRiderSidebar() {
+  const sidebar = document.getElementById('riderSidebar');
+  const overlay = document.getElementById('riderOverlay');
+  if (!sidebar) return;
+  sidebar.classList.toggle('open');
+  if (overlay) overlay.classList.toggle('show');
+}
+function closeRiderSidebar() {
+  const sidebar = document.getElementById('riderSidebar');
+  const overlay = document.getElementById('riderOverlay');
+  if (sidebar) sidebar.classList.remove('open');
+  if (overlay) overlay.classList.remove('show');
+}
+
 // ============================================================
 // BodaSACCO Rider Portal — JavaScript
 // Performance optimised: caching, debouncing, lazy loading
