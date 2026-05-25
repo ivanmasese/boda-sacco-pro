@@ -707,10 +707,13 @@ function loadCollections() {
 // WALLET
 // ============================================================
 async function loadWallet() {
-  // Fetch fresh data
+  // Fetch ALL fresh data from server
   try {
-    ALL_SAVINGS  = await api('/api/savings');
-    ALL_LOANS    = await api('/api/loans');
+    [ALL_SAVINGS, ALL_LOANS, ALL_EXPENSES] = await Promise.all([
+      api('/api/savings'),
+      api('/api/loans'),
+      api('/api/expenses')
+    ]);
   } catch(e) { console.error(e); }
 
   const totalSavings  = ALL_SAVINGS.filter(s => !s.reversed).reduce((sum, s) => sum + s.amount, 0);
@@ -874,20 +877,56 @@ function loadExpenses() {
 
 async function recordExpense() {
   const category    = document.getElementById('exp-category').value;
-  const amount      = document.getElementById('exp-amount').value;
+  const amount      = parseFloat(document.getElementById('exp-amount').value);
   const paidTo      = document.getElementById('exp-paid-to').value;
   const method      = document.getElementById('exp-method').value;
   const description = document.getElementById('exp-desc').value;
   const receipt     = document.getElementById('exp-receipt').value;
-  if (!amount || !category) return showMsg('exp-msg', 'Category and amount required.', 'error');
+
+  if (!amount || !category) return showMsg('exp-msg', '❌ Category and amount required.', 'error');
+  if (amount <= 0)           return showMsg('exp-msg', '❌ Amount must be greater than 0.', 'error');
+
+  // Professional control: expenses above UGX 100,000 require confirmation
+  const APPROVAL_LIMIT = 100000;
+  if (amount >= APPROVAL_LIMIT) {
+    const confirmed = confirm(
+      `⚠️ Large Expense Alert\n\n` +
+      `Amount: UGX ${amount.toLocaleString()}\n` +
+      `Category: ${category}\n` +
+      `Paid To: ${paidTo || 'Not specified'}\n\n` +
+      `Expenses above UGX 100,000 require confirmation.\n` +
+      `Are you sure you want to record this expense?`
+    );
+    if (!confirmed) return showMsg('exp-msg', 'ℹ️ Expense cancelled.', 'info');
+  }
+
+  // Check wallet balance before recording
+  const totalSavings  = ALL_SAVINGS.filter(s => !s.reversed).reduce((sum, s) => sum + s.amount, 0);
+  const totalLoaned   = ALL_LOANS.filter(l => ['active','overdue'].includes(l.status)).reduce((sum, l) => sum + l.amount, 0);
+  const totalExisting = ALL_EXPENSES.reduce((sum, e) => sum + e.amount, 0);
+  const currentBalance = Math.max(0, totalSavings - totalLoaned - totalExisting);
+
+  if (amount > currentBalance) {
+    const proceed = confirm(
+      `⚠️ Insufficient Wallet Balance\n\n` +
+      `Current Balance: UGX ${currentBalance.toLocaleString()}\n` +
+      `Expense Amount:  UGX ${amount.toLocaleString()}\n\n` +
+      `This expense exceeds your available balance.\n` +
+      `Do you still want to record it?`
+    );
+    if (!proceed) return showMsg('exp-msg', 'ℹ️ Expense cancelled.', 'info');
+  }
+
   try {
-    showMsg('exp-msg', '⏳ Recording...', 'info');
-    const expense = await api('/api/expenses', 'POST', { category, amount: parseFloat(amount), paidTo, method, description, receipt });
+    showMsg('exp-msg', '⏳ Recording expense...', 'info');
+    const expense = await api('/api/expenses', 'POST', { category, amount, paidTo, method, description, receipt });
     ALL_EXPENSES.push(expense);
-    showMsg('exp-msg', '✅ Expense recorded!', 'success');
+    showMsg('exp-msg', `✅ Expense of UGX ${amount.toLocaleString()} recorded successfully!`, 'success');
     ['exp-amount','exp-paid-to','exp-desc','exp-receipt'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
     loadExpenses();
-    setTimeout(() => closeModal('modal-expense'), 1500);
+    // Refresh dashboard to show updated wallet balance
+    if (document.getElementById('dash-cards')) loadDashboard();
+    setTimeout(() => closeModal('modal-expense'), 1800);
   } catch(err) { showMsg('exp-msg', '❌ ' + err.message, 'error'); }
 }
 
