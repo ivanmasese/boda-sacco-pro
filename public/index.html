@@ -263,11 +263,11 @@
 
       <!-- Loan tabs -->
       <div class="tab-strip">
-        <button class="tstab active" onclick="switchLoanTab('pending',this)">⏳ Pending</button>
-        <button class="tstab" onclick="switchLoanTab('active',this)">✅ Active</button>
-        <button class="tstab" onclick="switchLoanTab('overdue',this)">⚠️ Overdue</button>
-        <button class="tstab" onclick="switchLoanTab('paid',this)">🏁 Paid</button>
-        <button class="tstab" onclick="switchLoanTab('all',this)">📋 All</button>
+        <button class="tstab active" data-status="all" onclick="switchLoanTab('all',this)">📋 All</button>
+        <button class="tstab" data-status="active" onclick="switchLoanTab('active',this)">✅ Active</button>
+        <button class="tstab" data-status="pending" onclick="switchLoanTab('pending',this)">⏳ Pending</button>
+        <button class="tstab" data-status="overdue" onclick="switchLoanTab('overdue',this)">⚠️ Overdue</button>
+        <button class="tstab" data-status="paid" onclick="switchLoanTab('paid',this)">🏁 Paid</button>
       </div>
 
       <!-- Loan summary -->
