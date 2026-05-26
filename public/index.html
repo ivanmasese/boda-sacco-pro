@@ -92,24 +92,24 @@
     <nav class="sb-nav">
       <div class="sb-nav-label">Main</div>
       <button class="sbn active" onclick="goTo('home')"><span>🏠</span>Dashboard</button>
-      <button class="sbn" onclick="goTo('alerts')"><span>🔔</span>Urgent Actions <span id="alert-count" class="alert-badge" style="display:none">0</span></button>
+      <button class="sbn" id="btn-alerts" onclick="goTo('alerts')"><span>🔔</span>Urgent Actions <span id="alert-count" class="alert-badge" style="display:none">0</span></button>
       <button class="sbn" onclick="goTo('profile')"><span>👤</span>My Profile</button>
 
       <div class="sb-nav-label">Money</div>
       <button class="sbn" onclick="goTo('savings')"><span>💰</span>Savings</button>
-      <button class="sbn" onclick="goTo('loans')"><span>🏦</span>Loans</button>
+      <button class="sbn" id="btn-loans" onclick="goTo('loans')"><span>🏦</span>Loans</button>
       <button class="sbn" onclick="goTo('collections')"><span>📅</span>Collections</button>
       <button class="sbn" onclick="goTo('wallet')"><span>👛</span>SACCO Wallet</button>
 
       <div class="sb-nav-label">Operations</div>
-      <button class="sbn" onclick="goTo('riders')"><span>👥</span>Riders</button>
+      <button class="sbn" id="btn-riders" onclick="goTo('riders')"><span>👥</span>Riders</button>
       <button class="sbn" onclick="goTo('expenses')"><span>💸</span>Expenses</button>
       <button class="sbn" onclick="goTo('payments')"><span>📱</span>Payments</button>
-      <button class="sbn" onclick="goTo('messages')"><span>💬</span>Messages</button>
+      <button class="sbn" id="btn-messages" onclick="goTo('messages')"><span>💬</span>Messages</button>
 
       <div class="sb-nav-label">Reports</div>
       <button class="sbn" onclick="goTo('reports')"><span>📈</span>Reports</button>
-      <button class="sbn" onclick="goTo('settings')"><span>⚙️</span>Settings</button>
+      <button class="sbn" id="btn-settings" onclick="goTo('settings')"><span>⚙️</span>Settings</button>
     </nav>
 
     <button class="sb-logout" onclick="doLogout()">↩ Sign Out</button>
