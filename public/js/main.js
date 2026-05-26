@@ -1111,25 +1111,193 @@ async function loadReports() {
     const period = document.getElementById('rpt-period')?.value || 'week';
     const rpt    = await api(`/api/reports/summary?period=${period}`);
 
+    // Fetch fresh data for income statement
+    const [savings, loans, expenses] = await Promise.all([
+      api('/api/savings'),
+      api('/api/loans'),
+      api('/api/expenses')
+    ]);
+    ALL_SAVINGS  = savings;
+    ALL_LOANS    = loans;
+    ALL_EXPENSES = expenses;
+
+    // Period filter
+    const now = new Date();
+    let cutoff = new Date(0);
+    let periodLabel = '';
+    if (period === 'day') {
+      cutoff = new Date(); cutoff.setHours(0,0,0,0);
+      periodLabel = 'Today — ' + now.toLocaleDateString('en-UG');
+    } else if (period === 'week') {
+      cutoff = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+      periodLabel = 'This Week';
+    } else if (period === 'month') {
+      cutoff = new Date(); cutoff.setDate(1); cutoff.setHours(0,0,0,0);
+      periodLabel = now.toLocaleString('en-UG', { month:'long', year:'numeric' });
+    } else {
+      periodLabel = 'All Time';
+    }
+
+    const inPeriod = d => period === 'all' || new Date(d) >= cutoff;
+
+    // ── INCOME CALCULATIONS ──────────────────────────────────
+    const periodSavings   = ALL_SAVINGS.filter(s => !s.reversed && inPeriod(s.date));
+    const totalSavingsIn  = periodSavings.reduce((sum, s) => sum + s.amount, 0);
+
+    const periodLoans     = ALL_LOANS.filter(l => inPeriod(l.createdAt));
+    const interestIncome  = periodLoans.reduce((sum, l) => sum + (l.interestAmount || 0), 0);
+
+    const penalties       = ALL_LOANS.filter(l => l.penaltyAmount > 0 && inPeriod(l.createdAt))
+                              .reduce((sum, l) => sum + (l.penaltyAmount || 0), 0);
+
+    const totalIncome     = totalSavingsIn + interestIncome + penalties;
+
+    // ── EXPENDITURE CALCULATIONS ─────────────────────────────
+    const periodExpenses  = ALL_EXPENSES.filter(e => inPeriod(e.date));
+
+    // Group expenses by category
+    const expByCategory = {};
+    periodExpenses.forEach(e => {
+      expByCategory[e.category] = (expByCategory[e.category] || 0) + e.amount;
+    });
+
+    const loansIssued     = ALL_LOANS.filter(l => l.status !== 'pending' && inPeriod(l.createdAt))
+                              .reduce((sum, l) => sum + l.amount, 0);
+    const totalExpenditure = periodExpenses.reduce((sum, e) => sum + e.amount, 0);
+
+    // Net result
+    const netSurplus = totalIncome - totalExpenditure;
+
+    // ── SUMMARY CARDS ────────────────────────────────────────
     document.getElementById('rpt-cards').innerHTML = [
-      { label:'Period Savings',  val:ugx(rpt.totalSavings),  color:'c-green', icon:'💰' },
-      { label:'Period Deposits', val:rpt.totalDeposits,       color:'c-blue',  icon:'📊' },
-      { label:'Loans Issued',    val:ugx(rpt.totalLoans),     color:'c-gold',  icon:'🏦' },
-      { label:'Repayment Rate',  val:rpt.repaymentRate+'%',   color:'c-teal',  icon:'✅' },
+      { label:'Total Income',      val:ugx(totalIncome),       color:'c-green',  icon:'💰' },
+      { label:'Total Expenditure', val:ugx(totalExpenditure),  color:'c-gold',   icon:'💸' },
+      { label:'Net Surplus',       val:ugx(Math.abs(netSurplus)), color: netSurplus >= 0 ? 'c-teal' : 'c-red', icon: netSurplus >= 0 ? '📈' : '📉' },
+      { label:'Repayment Rate',    val:rpt.repaymentRate+'%',  color:'c-blue',   icon:'✅' },
     ].map(s=>`<div class="stat-card ${s.color}"><div class="sc-top"><div class="sc-label">${s.label}</div><div class="sc-icon">${s.icon}</div></div><div class="sc-val">${s.val}</div></div>`).join('');
 
-    document.getElementById('rpt-top-savers').innerHTML = rpt.topSavers.length === 0 ? '<p class="empty-state">No data.</p>' :
-      rpt.topSavers.map((s,i)=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
-        <div>${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)} <strong>${s.name}</strong></div>
-        <div style="color:var(--green);font-weight:700">${ugx(s.total)}</div>
-      </div>`).join('');
+    // ── INCOME STATEMENT ─────────────────────────────────────
+    document.getElementById('rpt-period-label').textContent = periodLabel;
 
-    document.getElementById('rpt-defaulters').innerHTML = rpt.defaulters.length === 0 ? '<p class="empty-state">No defaulters 🎉</p>' :
-      rpt.defaulters.map(d=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
-        <div><strong>${d.riderName}</strong><br/><span style="font-size:0.75rem;color:var(--muted)">${d.phone}</span></div>
-        <div style="text-align:right"><div style="color:var(--red);font-weight:700">${ugx(d.remaining)}</div><div style="font-size:0.72rem;color:var(--muted)">${dt(d.dueDate)}</div></div>
-      </div>`).join('');
-  } catch(err) { console.error(err); }
+    const incomeRow = (label, amount, muted=false) => `
+      <div style="display:flex;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--border);${muted?'color:var(--muted)':''}">
+        <span>${label}</span>
+        <span style="font-weight:600">${ugx(amount)}</span>
+      </div>`;
+
+    document.getElementById('income-rows').innerHTML =
+      incomeRow('Member Savings Collected', totalSavingsIn) +
+      incomeRow('Interest Income', interestIncome) +
+      (penalties > 0 ? incomeRow('Penalty Income', penalties) : '');
+
+    document.getElementById('total-income').textContent = ugx(totalIncome);
+
+    // Expense rows by category
+    const expRows = Object.entries(expByCategory)
+      .sort((a, b) => b[1] - a[1])
+      .map(([cat, amt]) => incomeRow(cat, amt))
+      .join('');
+
+    document.getElementById('expense-rows').innerHTML = expRows ||
+      '<div style="padding:12px 14px;color:var(--muted)">No expenses recorded for this period</div>';
+
+    document.getElementById('total-expenditure').textContent = ugx(totalExpenditure);
+
+    // Net result
+    const netEl = document.getElementById('net-result');
+    if (netSurplus >= 0) {
+      netEl.style.background = '#d4edda';
+      netEl.style.color = 'var(--green)';
+      netEl.innerHTML = `<span>📈 Net Surplus</span><span>${ugx(netSurplus)}</span>`;
+    } else {
+      netEl.style.background = '#fde8e8';
+      netEl.style.color = 'var(--red)';
+      netEl.innerHTML = `<span>📉 Net Deficit</span><span>-${ugx(Math.abs(netSurplus))}</span>`;
+    }
+
+    // ── LOAN BOOK ────────────────────────────────────────────
+    const active  = ALL_LOANS.filter(l => l.status === 'active').length;
+    const overdue = ALL_LOANS.filter(l => l.status === 'overdue').length;
+    const paid    = ALL_LOANS.filter(l => l.status === 'paid').length;
+    const pending = ALL_LOANS.filter(l => l.status === 'pending').length;
+    const totalOutstanding = ALL_LOANS.filter(l => ['active','overdue'].includes(l.status))
+                              .reduce((sum, l) => sum + (l.remaining || l.amount), 0);
+
+    document.getElementById('loan-book').innerHTML = `
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px">
+        ${[
+          { label:'Active Loans',   val:active,  color:'var(--blue)' },
+          { label:'Overdue Loans',  val:overdue, color:'var(--red)' },
+          { label:'Paid Loans',     val:paid,    color:'var(--green)' },
+          { label:'Pending Loans',  val:pending, color:'var(--gold)' },
+        ].map(s=>`<div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center">
+          <div style="font-size:1.4rem;font-weight:800;color:${s.color}">${s.val}</div>
+          <div style="font-size:0.78rem;color:var(--muted);margin-top:4px">${s.label}</div>
+        </div>`).join('')}
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:12px 14px;background:var(--bg);border-radius:8px;font-weight:700">
+        <span>Total Outstanding Loan Portfolio</span>
+        <span style="color:var(--red)">${ugx(totalOutstanding)}</span>
+      </div>`;
+
+    // ── TOP SAVERS ───────────────────────────────────────────
+    document.getElementById('rpt-top-savers').innerHTML = rpt.topSavers.length === 0 ?
+      '<p class="empty-state">No savings data yet.</p>' :
+      rpt.topSavers.map((s,i)=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:1.2rem">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'🏅'}</span>
+            <div><strong>${s.name}</strong><br/><span style="font-size:0.75rem;color:var(--muted)">${s.phone||''}</span></div>
+          </div>
+          <div style="color:var(--green);font-weight:700">${ugx(s.total)}</div>
+        </div>`).join('');
+
+    // ── DEFAULTERS ───────────────────────────────────────────
+    document.getElementById('rpt-defaulters').innerHTML = rpt.defaulters.length === 0 ?
+      '<p class="empty-state">No defaulters 🎉 All loans on track!</p>' :
+      rpt.defaulters.map(d=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
+          <div>
+            <strong>${d.riderName}</strong><br/>
+            <span style="font-size:0.75rem;color:var(--muted)">${d.phone} · Due: ${dt(d.dueDate)}</span>
+          </div>
+          <div style="text-align:right">
+            <div style="color:var(--red);font-weight:700">${ugx(d.remaining)}</div>
+            ${d.penalty > 0 ? `<div style="font-size:0.72rem;color:var(--red)">+${ugx(d.penalty)} penalty</div>` : ''}
+          </div>
+        </div>`).join('');
+
+  } catch(err) { console.error('Reports error:', err); }
+}
+
+function printIncomeStatement() {
+  const content = document.getElementById('income-statement').innerHTML;
+  const period  = document.getElementById('rpt-period-label').textContent;
+  const saccoName = ADMIN?.saccoName || 'SACCO';
+  const win = window.open('', '_blank');
+  win.document.write(`
+    <html><head><title>Income Statement — ${saccoName}</title>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 30px; color: #1a1e16; }
+      h1 { text-align: center; color: #1a6b3c; }
+      h2 { text-align: center; color: #666; font-size: 14px; font-weight: normal; }
+      h3 { text-align: center; margin-bottom: 20px; }
+      .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+      .total { font-weight: bold; background: #f5f5f5; padding: 10px; border-radius: 6px; }
+      .net-green { background: #d4edda; color: #1a6b3c; font-weight: bold; padding: 12px; border-radius: 8px; font-size: 16px; }
+      .net-red { background: #fde8e8; color: #c0392b; font-weight: bold; padding: 12px; border-radius: 8px; font-size: 16px; }
+      @media print { button { display: none; } }
+    </style></head>
+    <body>
+      <h1>${saccoName}</h1>
+      <h2>Income Statement — ${period}</h2>
+      <h3>Printed on ${new Date().toLocaleDateString('en-UG')}</h3>
+      <hr/>
+      ${content}
+      <br/><br/>
+      <button onclick="window.print()" style="padding:10px 20px;background:#1a6b3c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:14px">🖨️ Print</button>
+    </body></html>`);
+  win.document.close();
 }
 
 function exportReport(type) {
