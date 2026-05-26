@@ -619,7 +619,7 @@ async function loadLoans() {
         <td style="font-size:0.78rem;color:${new Date(l.dueDate)<new Date()?'var(--red)':'var(--muted)'}">${dt(l.dueDate)}</td>
         <td>${badge(l.status)}</td>
         <td style="display:flex;gap:4px;flex-wrap:wrap">
-          ${l.status==='pending' ? `<button class="btn-sm btn-approve" onclick="approveLoan('${l.id}')">✅</button><button class="btn-sm btn-reject" onclick="rejectLoan('${l.id}')">❌</button>` : ''}
+          ${l.status==='pending' && ADMIN?.role !== 'treasurer' ? `<button class="btn-sm btn-approve" onclick="approveLoan('${l.id}')">✅ Approve</button><button class="btn-sm btn-reject" onclick="rejectLoan('${l.id}')">❌ Reject</button>` : ''}
           ${['active','overdue'].includes(l.status) ? `<button class="btn-sm btn-view" onclick="openRepayModal('${l.id}',${l.remaining||0})">💳 Repay</button>` : ''}
           <button class="btn-sm btn-warn" onclick="viewRiderProfile('${l.riderId}')">👤</button>
         </td>
