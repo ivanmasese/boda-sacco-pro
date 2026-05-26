@@ -36,7 +36,7 @@ let ALL_RIDERS  = [];
 let ALL_LOANS   = [];
 let ALL_SAVINGS = [];
 let ALL_EXPENSES = [];
-let LOAN_FILTER = 'pending';
+let LOAN_FILTER = 'all';
 let CHART_DATA  = {};
 
 // ============================================================
@@ -569,22 +569,44 @@ async function reverseDeposit(id) {
 // ============================================================
 async function loadLoans() {
   try {
-    const url = LOAN_FILTER === 'all' ? '/api/loans' : `/api/loans?status=${LOAN_FILTER}`;
-    ALL_LOANS = await api(url);
+    // Always fetch ALL loans from server then filter client side
+    ALL_LOANS = await api('/api/loans');
 
-    const totalActive  = ALL_LOANS.filter(l => l.status==='active').length;
-    const totalOverdue = ALL_LOANS.filter(l => l.status==='overdue').length;
-    const totalAmt     = ALL_LOANS.reduce((sum, l) => sum + l.amount, 0);
-    const outstanding  = ALL_LOANS.filter(l => ['active','overdue'].includes(l.status)).reduce((sum, l) => sum + (l.remaining||l.amount), 0);
+    // Count all statuses from full data
+    const allActive  = ALL_LOANS.filter(l => l.status==='active');
+    const allOverdue = ALL_LOANS.filter(l => l.status==='overdue');
+    const allPending = ALL_LOANS.filter(l => l.status==='pending');
+    const allPaid    = ALL_LOANS.filter(l => l.status==='paid');
+    const totalAmt   = ALL_LOANS.reduce((sum, l) => sum + l.amount, 0);
+    const outstanding = ALL_LOANS.filter(l => ['active','overdue'].includes(l.status)).reduce((sum, l) => sum + (l.remaining||l.amount), 0);
 
     document.getElementById('loan-summary').innerHTML = `
       <div class="ss-item"><div class="ss-val">${ALL_LOANS.length}</div><div class="ss-lbl">Total Loans</div></div>
       <div class="ss-item"><div class="ss-val">${ugx(totalAmt)}</div><div class="ss-lbl">Total Issued</div></div>
       <div class="ss-item"><div class="ss-val">${ugx(outstanding)}</div><div class="ss-lbl">Outstanding</div></div>
-      <div class="ss-item"><div class="ss-val" style="color:var(--red)">${totalOverdue}</div><div class="ss-lbl">Overdue</div></div>`;
+      <div class="ss-item"><div class="ss-val" style="color:var(--red)">${allOverdue.length}</div><div class="ss-lbl">Overdue</div></div>`;
+
+    // Update tab counts
+    const tabs = {
+      'all':     ALL_LOANS.length,
+      'pending': allPending.length,
+      'active':  allActive.length,
+      'overdue': allOverdue.length,
+      'paid':    allPaid.length,
+    };
+    document.querySelectorAll('.tstab').forEach(btn => {
+      const status = btn.getAttribute('data-status');
+      if (status && tabs[status] !== undefined) {
+        const count = tabs[status];
+        btn.innerHTML = btn.innerHTML.replace(/\s*\(\d+\)/, '') + (count > 0 ? ` (${count})` : '');
+      }
+    });
+
+    // Filter for display
+    const displayLoans = LOAN_FILTER === 'all' ? ALL_LOANS : ALL_LOANS.filter(l => l.status === LOAN_FILTER);
 
     const el = document.getElementById('loans-table');
-    el.innerHTML = ALL_LOANS.length === 0 ? '<p class="empty-state">No loans found.</p>' :
+    el.innerHTML = displayLoans.length === 0 ? `<p class="empty-state">No ${LOAN_FILTER === 'all' ? '' : LOAN_FILTER} loans found.</p>` :
       `<table class="dtable"><thead><tr><th>Date</th><th>Rider</th><th>Amount</th><th>Interest</th><th>Total</th><th>Paid</th><th>Remaining</th><th>Due</th><th>Status</th><th>Actions</th></tr></thead>
       <tbody>${ALL_LOANS.map(l => `<tr>
         <td>${dt(l.createdAt)}</td>
@@ -610,6 +632,22 @@ function switchLoanTab(status, btn) {
   document.querySelectorAll('.tstab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   loadLoans();
+}
+
+// After approval/rejection always reload all loans and reset to active tab
+async function approveLoanAndRefresh(id) {
+  try {
+    await api(`/api/loans/${id}/approve`, 'PUT');
+    LOAN_FILTER = 'active';
+    document.querySelectorAll('.tstab').forEach(b => {
+      if (b.getAttribute('data-status') === 'active') b.classList.add('active');
+      else b.classList.remove('active');
+    });
+    await loadAllData();
+    loadLoans();
+    loadAlerts();
+    loadDashboard();
+  } catch(err) { alert(err.message); }
 }
 
 function previewLoan() {
@@ -641,7 +679,7 @@ async function createLoan() {
 }
 
 async function approveLoan(id) {
-  try { await api(`/api/loans/${id}/approve`, 'PUT'); await loadAllData(); loadLoans(); loadAlerts(); } catch(err) { alert(err.message); }
+  await approveLoanAndRefresh(id);
 }
 async function rejectLoan(id) {
   if (!confirm('Reject this loan?')) return;
@@ -661,8 +699,16 @@ async function submitRepayment() {
   try {
     showMsg('repay-msg', '⏳ Recording...', 'info');
     const data = await api(`/api/loans/${SEL_LOAN}/repay`, 'POST', { amount });
-    showMsg('repay-msg', `✅ Repayment recorded! Remaining: ${ugx(data.remaining)}`, 'success');
-    await loadAllData(); loadLoans();
+    showMsg('repay-msg', `✅ Repayment of ${ugx(parseFloat(amount))} recorded! Remaining: ${ugx(data.remaining)}`, 'success');
+    // Refresh all data and switch to active tab
+    LOAN_FILTER = data.remaining <= 0 ? 'paid' : 'active';
+    document.querySelectorAll('.tstab').forEach(b => {
+      if (b.getAttribute('data-status') === LOAN_FILTER) b.classList.add('active');
+      else b.classList.remove('active');
+    });
+    await loadAllData();
+    loadLoans();
+    loadDashboard();
     setTimeout(() => closeModal('modal-repay'), 1500);
   } catch(err) { showMsg('repay-msg', '❌ ' + err.message, 'error'); }
 }
