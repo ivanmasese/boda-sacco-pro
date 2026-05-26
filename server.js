@@ -13,8 +13,8 @@ const bcrypt  = require("bcryptjs");
 
 const app  = express();
 const PORT = 3000;
-// Use /opt/render/project/data on Render, local data folder otherwise
-const DATA_DIR = process.env.RENDER ? '/opt/render/project/src/data' : path.join(__dirname, "data");
+// Data directory — use DB_PATH env var if set, otherwise local data folder
+const DATA_DIR = process.env.DB_PATH || path.join(__dirname, "data");
 const DB = path.join(DATA_DIR, "db.json");
 
 // Make sure data directory exists
