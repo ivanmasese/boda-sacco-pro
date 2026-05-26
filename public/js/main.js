@@ -924,8 +924,10 @@ async function recordExpense() {
     showMsg('exp-msg', `✅ Expense of UGX ${amount.toLocaleString()} recorded successfully!`, 'success');
     ['exp-amount','exp-paid-to','exp-desc','exp-receipt'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
     loadExpenses();
-    // Refresh dashboard to show updated wallet balance
-    if (document.getElementById('dash-cards')) loadDashboard();
+    // Always refresh ALL_EXPENSES and wallet data
+    ALL_EXPENSES = await api('/api/expenses');
+    await loadWallet();
+    loadDashboard();
     setTimeout(() => closeModal('modal-expense'), 1800);
   } catch(err) { showMsg('exp-msg', '❌ ' + err.message, 'error'); }
 }
@@ -966,17 +968,71 @@ function selPayNet(net) {
 async function makePayment() {
   const name   = document.getElementById('pmt-name').value.trim();
   const phone  = document.getElementById('pmt-phone').value.trim();
-  const amount = document.getElementById('pmt-amount').value;
+  const amount = parseFloat(document.getElementById('pmt-amount').value);
   const notes  = document.getElementById('pmt-notes').value;
-  if (!name || !amount) return showMsg('pmt-msg', 'Recipient name and amount required.', 'error');
+
+  if (!name || !amount) return showMsg('pmt-msg', '❌ Recipient name and amount required.', 'error');
+  if (amount <= 0)       return showMsg('pmt-msg', '❌ Amount must be greater than 0.', 'error');
+
+  // Check wallet balance before payment
+  const totalSavings  = ALL_SAVINGS.filter(s => !s.reversed).reduce((sum, s) => sum + s.amount, 0);
+  const totalLoaned   = ALL_LOANS.filter(l => ['active','overdue'].includes(l.status)).reduce((sum, l) => sum + l.amount, 0);
+  const totalExisting = ALL_EXPENSES.reduce((sum, e) => sum + e.amount, 0);
+  const currentBalance = Math.max(0, totalSavings - totalLoaned - totalExisting);
+
+  // Approval required for payments above UGX 100,000
+  if (amount >= 100000) {
+    const confirmed = confirm(
+      `⚠️ Large Payment Alert\n\n` +
+      `Recipient: ${name}\n` +
+      `Category:  ${SEL_PAY_CAT}\n` +
+      `Amount:    UGX ${amount.toLocaleString()}\n` +
+      `Method:    ${SEL_PAY_NET.toUpperCase()}\n\n` +
+      `Payments above UGX 100,000 require confirmation.\n` +
+      `Current wallet balance: UGX ${currentBalance.toLocaleString()}\n\n` +
+      `Confirm this payment?`
+    );
+    if (!confirmed) return showMsg('pmt-msg', 'ℹ️ Payment cancelled.', 'info');
+  }
+
+  if (amount > currentBalance) {
+    const proceed = confirm(
+      `⚠️ Insufficient Wallet Balance\n\n` +
+      `Current Balance: UGX ${currentBalance.toLocaleString()}\n` +
+      `Payment Amount:  UGX ${amount.toLocaleString()}\n\n` +
+      `This payment exceeds your available balance.\n` +
+      `Do you still want to record it?`
+    );
+    if (!proceed) return showMsg('pmt-msg', 'ℹ️ Payment cancelled.', 'info');
+  }
+
   try {
     showMsg('pmt-msg', '⏳ Processing payment...', 'info');
-    const expense = { id: Date.now().toString(), category: SEL_PAY_CAT, amount: parseFloat(amount), paidTo: name, method: SEL_PAY_NET, description: notes, phone, paymentType:'direct_payment', date: new Date().toISOString(), recordedBy: ADMIN?.name };
+
+    // Save to server — not localStorage
+    const expense = await api('/api/expenses', 'POST', {
+      category:    SEL_PAY_CAT,
+      amount:      amount,
+      paidTo:      name,
+      method:      SEL_PAY_NET,
+      description: notes || SEL_PAY_CAT + ' payment',
+      receipt:     phone,
+      paymentType: 'direct_payment'
+    });
+
     ALL_EXPENSES.push(expense);
-    localStorage.setItem('expenses_' + (ADMIN?.saccoId || 'default'), JSON.stringify(ALL_EXPENSES));
-    if (SEL_PAY_NET !== 'cash') console.log(`[MOBILE MONEY SANDBOX] ${SEL_PAY_NET.toUpperCase()}: UGX ${amount} to ${phone} (${name}). Category: ${SEL_PAY_CAT}`);
-    showMsg('pmt-msg', `✅ Payment of UGX ${Number(amount).toLocaleString()} to ${name} recorded! (Sandbox mode)`, 'success');
+
+    if (SEL_PAY_NET !== 'cash') {
+      showMsg('pmt-msg', `✅ Payment of UGX ${amount.toLocaleString()} to ${name} recorded! Mobile money notification sent (Sandbox).`, 'success');
+    } else {
+      showMsg('pmt-msg', `✅ Cash payment of UGX ${amount.toLocaleString()} to ${name} recorded successfully!`, 'success');
+    }
+
     loadPayments();
+    // Always refresh ALL_EXPENSES and wallet data
+    ALL_EXPENSES = await api('/api/expenses');
+    await loadWallet();
+    loadDashboard();
     setTimeout(() => closeModal('modal-payment'), 2000);
   } catch(err) { showMsg('pmt-msg', '❌ ' + err.message, 'error'); }
 }
