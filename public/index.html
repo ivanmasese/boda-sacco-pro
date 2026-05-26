@@ -439,24 +439,76 @@
 
     <!-- ====== REPORTS ====== -->
     <div id="pg-reports" class="pg">
-      <div class="pg-header"><h2>📈 Reports & Analytics</h2><p>Financial performance overview</p></div>
-      <div class="filter-bar">
+      <div class="pg-header">
+        <h2>📈 Reports & Analytics</h2>
+        <p>Financial performance overview</p>
+      </div>
+
+      <!-- Period Filter & Export -->
+      <div class="filter-bar" style="margin-bottom:20px">
         <select id="rpt-period" class="filter-select" onchange="loadReports()">
           <option value="day">Today</option>
           <option value="week" selected>This Week</option>
           <option value="month">This Month</option>
+          <option value="all">All Time</option>
         </select>
         <button class="btn-primary" onclick="exportReport('savings')">⬇ Export Savings</button>
         <button class="btn-primary" onclick="exportReport('loans')">⬇ Export Loans</button>
+        <button class="btn-primary" onclick="printIncomeStatement()">🖨️ Print Statement</button>
       </div>
+
+      <!-- Summary Cards -->
       <div class="cards-grid" id="rpt-cards"></div>
+
+      <!-- Income Statement -->
+      <div class="set-card" id="income-statement" style="margin:20px 0">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <h3>📋 Income Statement</h3>
+          <span id="rpt-period-label" style="color:var(--muted);font-size:0.85rem"></span>
+        </div>
+
+        <!-- INCOME SECTION -->
+        <div style="margin-bottom:16px">
+          <div style="background:var(--green3);padding:8px 14px;border-radius:8px;font-weight:700;color:var(--green);margin-bottom:8px;font-size:0.9rem">
+            💰 INCOME
+          </div>
+          <div id="income-rows"></div>
+          <div style="display:flex;justify-content:space-between;padding:10px 14px;background:#f0faf4;border-radius:8px;font-weight:700;margin-top:6px">
+            <span>Total Income</span>
+            <span id="total-income" style="color:var(--green)">UGX 0</span>
+          </div>
+        </div>
+
+        <!-- EXPENDITURE SECTION -->
+        <div style="margin-bottom:16px">
+          <div style="background:#fef3cd;padding:8px 14px;border-radius:8px;font-weight:700;color:var(--gold);margin-bottom:8px;font-size:0.9rem">
+            💸 EXPENDITURE
+          </div>
+          <div id="expense-rows"></div>
+          <div style="display:flex;justify-content:space-between;padding:10px 14px;background:#fff8e1;border-radius:8px;font-weight:700;margin-top:6px">
+            <span>Total Expenditure</span>
+            <span id="total-expenditure" style="color:var(--gold)">UGX 0</span>
+          </div>
+        </div>
+
+        <!-- NET SURPLUS/DEFICIT -->
+        <div id="net-result" style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:10px;font-weight:800;font-size:1.1rem;margin-top:8px"></div>
+      </div>
+
+      <!-- Loan Book -->
+      <div class="set-card" style="margin-bottom:20px">
+        <h3 style="margin-bottom:14px">📒 Loan Book Summary</h3>
+        <div id="loan-book"></div>
+      </div>
+
+      <!-- Top Savers & Defaulters -->
       <div class="charts-row">
         <div class="chart-card">
           <div class="chart-head"><div class="chart-title">🏆 Top 5 Savers</div></div>
           <div id="rpt-top-savers"></div>
         </div>
         <div class="chart-card">
-          <div class="chart-head"><div class="chart-title">⚠️ Defaulters List</div></div>
+          <div class="chart-head"><div class="chart-title">⚠️ Loan Defaulters</div></div>
           <div id="rpt-defaulters"></div>
         </div>
       </div>
