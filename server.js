@@ -219,7 +219,14 @@ function requireAdmin(req, res, next) {
 }
 
 function requireSuper(req, res, next) {
-  if (req.admin.role !== "superadmin") return res.status(403).json({ error: "Only SACCO Super Admin can do this." });
+  if (req.admin.role !== "superadmin") return res.status(403).json({ error: "Only SACCO Chairman can do this." });
+  next();
+}
+
+// Treasurer can access money routes but not policy routes
+function requireChairmanOrTreasurer(req, res, next) {
+  if (!["superadmin","treasurer"].includes(req.admin.role))
+    return res.status(403).json({ error: "Access denied." });
   next();
 }
 
@@ -356,14 +363,26 @@ app.post("/api/master/saccos", requireMaster, (req, res) => {
   };
   db.admins.push(newAdmin);
 
+  // Create treasurer account automatically
+  const treasurerUsername = name.toLowerCase().replace(/\s+/g, "_").replace(/[^a-z0-9_]/g, "") + "_treasurer";
+  const treasurerPassword = Math.random().toString(36).substr(2, 8).toUpperCase() + "!";
+  const newTreasurer = {
+    id: genId(), saccoId, username: treasurerUsername,
+    password: treasurerPassword, role: "treasurer",
+    name: chairpersonName + " (Treasurer)", phone: chairpersonPhone,
+    createdAt: now(), createdBy: req.master.name
+  };
+  db.admins.push(newTreasurer);
+
   auditLog(db, req.master.name, saccoId, "CREATE_SACCO", `Created SACCO: ${name} on ${plan} plan. Chairman: ${chairpersonName}`);
   writeDB(db);
 
-  console.log(`[NEW SACCO] ${name} created. Chairman login: ${chairUsername} / ${chairPassword}`);
+  console.log(`[NEW SACCO] ${name} created. Chairman: ${chairUsername} / ${chairPassword} | Treasurer: ${treasurerUsername} / ${treasurerPassword}`);
   res.json({
     message: `SACCO "${name}" created successfully! Trial period: ${db.platformSettings.trialDays} days.`,
     sacco: newSacco,
     chairmanLogin: { username: chairUsername, password: chairPassword },
+    treasurerLogin: { username: treasurerUsername, password: treasurerPassword },
     trialEndsAt: trialEnd.toISOString()
   });
 });
@@ -639,7 +658,7 @@ app.post("/api/riders", requireAdmin, (req, res) => {
   res.json({ message: "Rider registered!", rider: newRider });
 });
 
-app.put("/api/riders/:id/status", requireAdmin, (req, res) => {
+app.put("/api/riders/:id/status", requireAdmin, requireSuper, (req, res) => {
   const db    = readDB();
   const rider = db.riders.find(r => r.id === req.params.id && r.saccoId === req.admin.saccoId);
   if (!rider) return res.status(404).json({ error: "Rider not found." });
@@ -808,7 +827,7 @@ app.post("/api/loans", requireAdmin, (req, res) => {
   res.json({ message: needsDual ? "Loan created. Requires second admin approval." : "Loan created!", loan });
 });
 
-app.put("/api/loans/:id/approve", requireAdmin, (req, res) => {
+app.put("/api/loans/:id/approve", requireAdmin, requireSuper, (req, res) => {
   const db    = readDB();
   const idx   = db.loans.findIndex(l => l.id === req.params.id && l.saccoId === req.admin.saccoId);
   if (idx === -1) return res.status(404).json({ error: "Loan not found." });
@@ -839,7 +858,7 @@ app.put("/api/loans/:id/approve", requireAdmin, (req, res) => {
   res.json({ message: "Loan approved!", loan: db.loans[idx] });
 });
 
-app.put("/api/loans/:id/reject", requireAdmin, (req, res) => {
+app.put("/api/loans/:id/reject", requireAdmin, requireSuper, (req, res) => {
   const db  = readDB();
   const idx = db.loans.findIndex(l => l.id === req.params.id && l.saccoId === req.admin.saccoId);
   if (idx === -1) return res.status(404).json({ error: "Loan not found." });
