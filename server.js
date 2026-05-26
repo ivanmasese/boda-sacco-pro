@@ -928,7 +928,7 @@ app.post("/api/expenses", requireAdmin, (req, res) => {
   const db = readDB();
   const saccoId = adminSessions[req.headers['x-admin-token']]?.saccoId;
   const admin   = adminSessions[req.headers['x-admin-token']];
-  const { category, amount, paidTo, method, description, receipt } = req.body;
+  const { category, amount, paidTo, method, description, receipt, paymentType } = req.body;
   if (!category || !amount || amount <= 0) return res.status(400).json({ error: 'Category and amount required.' });
   if (!db.expenses) db.expenses = [];
   const expense = {
@@ -936,6 +936,7 @@ app.post("/api/expenses", requireAdmin, (req, res) => {
     saccoId, category, amount: Number(amount),
     paidTo: paidTo || '', method: method || 'cash',
     description: description || '', receipt: receipt || '',
+    paymentType: paymentType || 'expense',
     date: new Date().toISOString(),
     recordedBy: admin?.name || 'Admin'
   };
