@@ -121,6 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function doLogout() {
   try { await api('/api/logout', 'POST'); } catch(e) {}
   TOKEN = null; ADMIN = null;
+  stopAutoRefresh();
   document.getElementById('app').classList.remove('active');
   document.getElementById('login-page').classList.add('active');
   document.getElementById('l-pass').value = '';
@@ -669,7 +670,15 @@ async function submitRepayment() {
 // ============================================================
 // COLLECTIONS
 // ============================================================
-function loadCollections() {
+async function loadCollections() {
+  // Always fetch fresh data
+  try {
+    [ALL_SAVINGS, ALL_RIDERS] = await Promise.all([
+      api('/api/savings'),
+      api('/api/riders')
+    ]);
+  } catch(e) { console.error(e); }
+
   const today    = new Date().toDateString();
   const weekAgo  = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
   const monthAgo = new Date(); monthAgo.setDate(1); monthAgo.setHours(0,0,0,0);
